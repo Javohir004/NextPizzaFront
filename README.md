@@ -29,7 +29,6 @@ NextPizza loyihasining **frontend qismi** - foydalanuvchilar uchun web interfeys
 - OpenFeign
 - Bootstrap 5
 
----
 
 ---
 
