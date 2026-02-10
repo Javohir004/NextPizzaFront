@@ -31,29 +31,6 @@ NextPizza loyihasining **frontend qismi** - foydalanuvchilar uchun web interfeys
 
 ---
 
-## ⚙️ Ishga tushirish
-
-```bash
-# Backend ishlab turishi kerak (http://localhost:8080)
-cd frontend
-./gradlew bootRun
-```
-
-**Frontend:** http://localhost:8081
-
----
-
-## 🔧 Konfiguratsiya
-
-`application.yml`:
-
-```yaml
-api:
-  base-url: http://localhost:8080/api/v1
-server:
-  port: 8081
-```
-
 ---
 
 ## 📂 Struktura
