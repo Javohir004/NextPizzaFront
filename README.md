@@ -1,8 +1,7 @@
-**To'g'ri!** 😄 Mana qisqa va aniq:
 
 ---
 
-# 🎨 NextPizza Frontend - Spring MVC
+# 🍕 NextPizza Frontend - Spring MVC
 
 NextPizza loyihasining **frontend qismi** - foydalanuvchilar uchun web interfeys. Backend REST API bilan **OpenFeign** orqali bog'lanadi.
 
