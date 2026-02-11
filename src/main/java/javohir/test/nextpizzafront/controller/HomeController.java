@@ -1,11 +1,13 @@
 package javohir.test.nextpizzafront.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import javohir.test.nextpizzafront.client.PizzaClient;
 import javohir.test.nextpizzafront.dto.response.PizzaResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
 
 import java.util.List;
 
@@ -14,6 +16,9 @@ import java.util.List;
 public class HomeController {
 
     private final PizzaClient pizzaClient;
+
+    @Value("${api.base-url}")
+    private String baseUrl;
 
     @GetMapping("/")
     public String home(Model model) {

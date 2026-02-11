@@ -84,10 +84,10 @@
             <div class="col-md-4 mb-4" th:each="pizza : ${pizzas}">
                 <div class="card pizza-card h-100">
                     <!-- Pizza rasmi -->
-                    <img th:src="@{'/uploads/pizzas/' + ${pizza.imageUrl}}"
+                    <img th:src="@{'http://localhost:3000/uploads/pizzas/' + ${pizza.imageUrl}}"
                          class="card-img-top pizza-img"
                          th:alt="${pizza.name}"
-                         onerror="this.src='https://via.placeholder.com/400x200?text=Pizza'">
+                         onerror="this.src='https://via.placeholder.com/400x200?text=Pizza'"/>
 
                     <div class="card-body">
                         <h5 class="card-title" th:text="${pizza.name}">Pizza nomi</h5>
