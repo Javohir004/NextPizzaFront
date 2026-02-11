@@ -13,7 +13,7 @@ import java.util.Map;
 @FeignClient(name = "pizza-service", url = "${api.base-url}")
 public interface PizzaClient {
 
-    @GetMapping("/pizza")
+    @GetMapping("/api/pizza")
     List<PizzaResponse> getAllPizzas();
 
     @GetMapping("/pizza/grouped")
