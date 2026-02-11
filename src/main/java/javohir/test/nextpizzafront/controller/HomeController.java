@@ -17,8 +17,17 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        List<PizzaResponse> pizzas = pizzaClient.getAllPizzas();
-        model.addAttribute("pizzas", pizzas);
-        return "home"; // home.html
+        try {
+            List<PizzaResponse> pizzas = pizzaClient.getAllPizzas();
+            int limit = Math.min(6, pizzas.size());
+            model.addAttribute("pizzas", pizzas.subList(0, limit));
+
+        } catch (Exception e) {
+            // Agar backend ishlamasa, bo'sh list
+            model.addAttribute("pizzas", List.of());
+        }
+        return "home";
     }
+
+
 }
