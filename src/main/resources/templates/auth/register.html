@@ -92,6 +92,7 @@
                 <label class="form-label">Email *</label>
                 <input type="email" class="form-control"
                        th:field="*{email}"
+                       autocomplete="off"
                        required>
             </div>
 
@@ -100,6 +101,7 @@
                 <input type="password" class="form-control"
                        th:field="*{password}"
                        minlength="6"
+                       autocomplete="new-password"
                        required>
             </div>
         </div>

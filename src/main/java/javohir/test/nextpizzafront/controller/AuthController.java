@@ -88,4 +88,19 @@ public class AuthController {
             return "redirect:/register";
         }
     }
+
+    /**
+     * Logout (chiqish)
+     */
+    @GetMapping("/logout")
+    public String logout(HttpServletResponse response, RedirectAttributes redirectAttributes) {
+        // Cookie ni o'chirish
+        Cookie cookie = new Cookie("JWT_TOKEN", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        redirectAttributes.addFlashAttribute("success", "Tizimdan chiqdingiz!");
+        return "redirect:/";
+    }
 }
