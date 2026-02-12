@@ -1,7 +1,7 @@
 package javohir.test.nextpizzafront.dto.request;
 
 
-import javohir.test.nextpizzafront.enomerator.PizzaType;
+import javohir.test.nextpizzafront.enums.PizzaType;
 import lombok.*;
 
 

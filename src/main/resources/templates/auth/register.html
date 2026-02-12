@@ -5,156 +5,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ro'yxatdan O'tish - NextPizza</title>
 
-    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        .register-container {
+        body {
             min-height: 100vh;
-            padding: 50px 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background:
+                    linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                    url('/images/792a6ac6-ccb8-49d1-a887-c1ed7cc8b6cf.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 60px 15px;
         }
-        .register-card {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 2rem;
+
+        .auth-card {
+            max-width: 720px;
+            margin: auto;
+            padding: 3rem;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .brand-title {
+            font-weight: 700;
+            color: #e63946;
+        }
+
+        .btn-primary {
+            background-color: #e63946;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #c62828;
+        }
+
+        .form-control:focus {
+            border-color: #e63946;
+            box-shadow: 0 0 0 0.2rem rgba(230,57,70,0.25);
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 
-<div class="register-container">
-    <div class="register-card">
-        <!-- Logo -->
-        <div class="text-center mb-4">
-            <h1 class="mb-2">🍕 NextPizza</h1>
-            <p class="text-muted">Ro'yxatdan o'tish</p>
-        </div>
+<div class="auth-card">
 
-        <!-- Error message -->
-        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <span th:text="${error}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
+    <div class="text-center mb-4">
+        <h2 class="brand-title">🍕 NextPizza</h2>
+        <p class="text-muted">Yangi akkaunt yarating</p>
+    </div>
 
-        <!-- Register Form -->
-        <form th:action="@{/register}" th:object="${registerRequest}" method="post">
-            <div class="row">
-                <!-- Username -->
-                <div class="col-md-6 mb-3">
-                    <label for="firstName" class="form-label">Username *</label>
-                    <input type="text"
-                           class="form-control"
-                           id="firstName"
-                           th:field="*{firstName}"
-                           placeholder="Username"
-                           required>
-                </div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-                <!-- Email -->
-                <div class="col-md-6 mb-3">
-                    <label for="email" class="form-label">Email *</label>
-                    <input type="email"
-                           class="form-control"
-                           id="email"
-                           th:field="*{email}"
-                           placeholder="email@example.com"
-                           required>
-                </div>
+    <form th:action="@{/register}" th:object="${registerRequest}" method="post">
 
-                <!-- Password -->
-                <div class="col-md-6 mb-3">
-                    <label for="password" class="form-label">Parol *</label>
-                    <input type="password"
-                           class="form-control"
-                           id="password"
-                           th:field="*{password}"
-                           placeholder="Kamida 6 ta belgi"
-                           required
-                           minlength="6">
-                </div>
+        <div class="section-title">Asosiy ma'lumot</div>
 
-                <!-- Phone Number -->
-                <div class="col-md-6 mb-3">
-                    <label for="phoneNumber" class="form-label">Telefon *</label>
-                    <input type="tel"
-                           class="form-control"
-                           id="phoneNumber"
-                           th:field="*{phoneNumber}"
-                           placeholder="+998901234567"
-                           required>
-                </div>
-
-                <!-- First Name -->
-                <div class="col-md-6 mb-3">
-                    <label for="firstName" class="form-label">Ism *</label>
-                    <input type="text"
-                           class="form-control"
-                           id="firstName"
-                           th:field="*{firstName}"
-                           placeholder="Ism"
-                           required>
-                </div>
-
-                <!-- Last Name -->
-                <div class="col-md-6 mb-3">
-                    <label for="lastName" class="form-label">Familiya *</label>
-                    <input type="text"
-                           class="form-control"
-                           id="lastName"
-                           th:field="*{lastName}"
-                           placeholder="Familiya"
-                           required>
-                </div>
-
-                <!-- Birth Date -->
-                <div class="col-md-6 mb-3">
-                    <label for="birthDate" class="form-label">Tug'ilgan kun</label>
-                    <input type="date"
-                           class="form-control"
-                           id="birthDate"
-                           th:field="*{birthDate}">
-                </div>
-
-                <!-- Address -->
-                <div class="col-12 mb-3">
-                    <label for="address" class="form-label">Manzil</label>
-                    <textarea class="form-control"
-                              id="address"
-                              th:field="*{address}"
-                              rows="2"
-                              placeholder="Manzil (ixtiyoriy)"></textarea>
-                </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Ism</label>
+                <input type="text" class="form-control"
+                       th:field="*{firstName}"
+                       placeholder="Ismingiz">
             </div>
 
-            <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary w-100 mb-3">
-                Ro'yxatdan O'tish
-            </button>
-
-            <!-- Login Link -->
-            <div class="text-center">
-                <p class="text-muted mb-0">
-                    Akkauntingiz bormi?
-                    <a href="/login" class="text-decoration-none">Tizimga kiring</a>
-                </p>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Familiya</label>
+                <input type="text" class="form-control"
+                       th:field="*{lastName}"
+                       placeholder="Familiyangiz">
             </div>
-        </form>
+        </div>
 
-        <!-- Back to Home -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-control"
+                       th:field="*{email}"
+                       required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Parol *</label>
+                <input type="password" class="form-control"
+                       th:field="*{password}"
+                       minlength="6"
+                       required>
+            </div>
+        </div>
+
+        <div class="section-title mt-3">Qo‘shimcha ma'lumot</div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Telefon</label>
+                <input type="tel" class="form-control"
+                       th:field="*{phoneNumber}"
+                       placeholder="+998901234567">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Tug‘ilgan sana</label>
+                <input type="date" class="form-control"
+                       th:field="*{birthDate}">
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label">Manzil</label>
+            <textarea class="form-control"
+                      th:field="*{address}"
+                      rows="2"
+                      placeholder="Yetkazib berish manzili"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2">
+            Ro'yxatdan O'tish
+        </button>
+
         <div class="text-center mt-3">
-            <a href="/" class="text-muted text-decoration-none">
+            <small>
+                Akkauntingiz bormi?
+                <a th:href="@{/login}" class="text-danger fw-bold text-decoration-none">
+                    Tizimga kiring
+                </a>
+            </small>
+        </div>
+
+        <div class="text-center mt-2">
+            <a href="/" class="text-muted small text-decoration-none">
                 ← Bosh sahifaga qaytish
             </a>
         </div>
-    </div>
+
+    </form>
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

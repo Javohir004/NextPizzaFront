@@ -1,6 +1,6 @@
 package javohir.test.nextpizzafront.dto.response.order;
 
-import javohir.test.nextpizzafront.enomerator.OrderStatus;
+import javohir.test.nextpizzafront.enums.OrderStatus;
 import lombok.*;
 
 import java.math.BigDecimal;

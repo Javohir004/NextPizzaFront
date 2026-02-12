@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+<!-- Navbar Fragment -->
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <!-- Logo -->
+        <a class="navbar-brand" href="/static">
+            <span style="font-size: 1.5rem;">🍕</span> NextPizza
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Items -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/pizzas">
+                        🍕 Pitsalar
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/drink">
+                        🥤 Ichimliklar
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Right Side - Authenticated User -->
+            <ul class="navbar-nav ms-auto" th:if="${isAuthenticated}" >
+                <!-- Cart with badge -->
+                <li class="nav-item">
+                    <a class="nav-link position-relative" href="/cart">
+                        🛒 Savat
+                        <span th:if="${cartItemCount > 0}"
+                              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                              th:text="${cartItemCount}">
+                            0
+                        </span>
+                    </a>
+                </li>
+
+                <!-- Orders -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/my-orders">
+                        📦 Buyurtmalar
+                    </a>
+                </li>
+
+                <!-- Balance -->
+                <li class="nav-item">
+                    <span class="nav-link text-warning">
+                        💰 <span th:text="${#numbers.formatDecimal(balance, 0, 'COMMA', 0, 'POINT')}">0</span> so'm
+                    </span>
+                </li>
+
+                <!-- Profile Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        👤 <span th:text="${username}">User</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" th:href="@{/profile}">
+                                Profil
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="/">
+                                Chiqish
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- Right Side - Guest User -->
+            <ul class="navbar-nav ms-auto" th:unless="${isAuthenticated}">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/login}">
+                        Kirish
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-primary text-white ms-2" th:href="@{/register}">
+                        Ro'yxatdan o'tish
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

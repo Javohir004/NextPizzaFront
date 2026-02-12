@@ -4,7 +4,7 @@ package javohir.test.nextpizzafront.dto.request;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import javohir.test.nextpizzafront.enomerator.DrinkType;
+import javohir.test.nextpizzafront.enums.DrinkType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
