@@ -1,6 +1,6 @@
 package javohir.test.nextpizzafront.dto.response;
 
-import javohir.test.nextpizzafront.enomerator.DrinkType;
+import javohir.test.nextpizzafront.enums.DrinkType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

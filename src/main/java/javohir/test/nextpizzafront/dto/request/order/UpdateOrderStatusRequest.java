@@ -1,7 +1,7 @@
 package javohir.test.nextpizzafront.dto.request.order;
 
 import jakarta.validation.constraints.NotNull;
-import javohir.test.nextpizzafront.enomerator.OrderStatus;
+import javohir.test.nextpizzafront.enums.OrderStatus;
 import lombok.Data;
 
 

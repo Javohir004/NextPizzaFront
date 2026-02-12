@@ -1,6 +1,6 @@
 package javohir.test.nextpizzafront.dto.request;
 
-import javohir.test.nextpizzafront.enomerator.Role;
+import javohir.test.nextpizzafront.enums.Role;
 import lombok.*;
 
 

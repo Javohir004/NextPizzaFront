@@ -1,6 +1,6 @@
 package javohir.test.nextpizzafront.dto.response;
 
-import javohir.test.nextpizzafront.enomerator.PizzaType;
+import javohir.test.nextpizzafront.enums.PizzaType;
 import lombok.*;
 
 import java.math.BigDecimal;

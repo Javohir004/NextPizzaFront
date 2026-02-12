@@ -1,4 +1,4 @@
-package javohir.test.nextpizzafront.enomerator;
+package javohir.test.nextpizzafront.enums;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

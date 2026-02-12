@@ -37,24 +37,20 @@ public class AuthController {
                         HttpServletResponse response,
                         RedirectAttributes redirectAttributes) {
         try {
-            // Backend ga login so'rovi
             AuthenticationResponse loginResponse = authClient.login(request);
 
-            // JWT ni cookie ga saqlash
-            Cookie cookie = new Cookie("JWT_TOKEN", loginResponse.getAccessToken());
+            // JWT ni cookie ga saqlash (accessToken!)
+            Cookie cookie = new Cookie("JWT_TOKEN", loginResponse.getAccessToken());  // ← O'zgardi
             cookie.setHttpOnly(true);
-            cookie.setMaxAge(86400); // 1 kun
+            cookie.setMaxAge(86400);
             cookie.setPath("/");
             response.addCookie(cookie);
 
-            // Muvaffaqiyatli xabar
-            redirectAttributes.addFlashAttribute("success", "Xush kelibsiz, "
-                    + loginResponse.getAccessToken() + "!");
+            redirectAttributes.addFlashAttribute("success", "Xush kelibsiz!");
 
             return "redirect:/pizzas";
 
         } catch (Exception e) {
-            // Xato xabari
             redirectAttributes.addFlashAttribute("error", "Login yoki parol noto'g'ri!");
             return "redirect:/login";
         }

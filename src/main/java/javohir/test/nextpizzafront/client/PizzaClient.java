@@ -1,7 +1,7 @@
 package javohir.test.nextpizzafront.client;
 
 import javohir.test.nextpizzafront.dto.response.PizzaResponse;
-import javohir.test.nextpizzafront.enomerator.PizzaType;
+import javohir.test.nextpizzafront.enums.PizzaType;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +13,7 @@ import java.util.Map;
 @FeignClient(name = "pizza-service", url = "${api.base-url}")
 public interface PizzaClient {
 
-    @GetMapping("/api/pizza")
+    @GetMapping("/pizza")
     List<PizzaResponse> getAllPizzas();
 
     @GetMapping("/pizza/grouped")
