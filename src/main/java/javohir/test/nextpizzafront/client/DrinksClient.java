@@ -12,7 +12,7 @@ import java.util.List;
 @FeignClient(name = "drinks-service", url = "${api.base-url}")
 public interface DrinksClient {
 
-    @GetMapping("/drinks")
+    @GetMapping("/drink/find-all")
     List<DrinkResponse> getAllDrinks();
 
     @GetMapping("/drinks/type/{type}")
