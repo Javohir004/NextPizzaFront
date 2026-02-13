@@ -137,16 +137,12 @@
                     Barchasi
                 </a>
 
-                <a th:href="@{/drinks/type/CARBONATED}"
+                <!-- Enum bo'yicha aylanish -->
+                <a th:each="type : ${T(javohir.test.nextpizzafront.enums.DrinkType).values()}"
+                   th:href="@{'/drinks/type/' + ${type}}"
                    class="btn btn-outline-primary"
-                   th:classappend="${selectedType?.name() == 'CARBONATED'} ? 'active' : ''">
-                    Gazlangan
-                </a>
-
-                <a th:href="@{/drinks/type/STILL}"
-                   class="btn btn-outline-primary"
-                   th:classappend="${selectedType?.name() == 'STILL'} ? 'active' : ''">
-                    Gazsiz
+                   th:text="${type}"
+                   th:classappend="${selectedType?.name() == type.name()} ? ' active' : ''">
                 </a>
 
             </div>

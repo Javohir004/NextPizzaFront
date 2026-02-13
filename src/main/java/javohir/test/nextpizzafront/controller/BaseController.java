@@ -2,9 +2,20 @@ package javohir.test.nextpizzafront.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import javohir.test.nextpizzafront.client.UserClient;
+import javohir.test.nextpizzafront.dto.response.UserResponse;
+import javohir.test.nextpizzafront.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
+
 public class BaseController {
+
+    @Autowired
+    private UserClient userClient;
+
+    @Autowired
+    private  JwtUtil jwtUtil;
 
     /**
      * Navbar uchun ma'lumotlarni qo'shish
@@ -13,6 +24,9 @@ public class BaseController {
         // JWT token bor-yo'qligini tekshirish
         boolean isAuthenticated = isUserAuthenticated(request);
         model.addAttribute("isAuthenticated", isAuthenticated);
+
+//        Long userId = jwtUtil.getUserIdFromRequest(request); // JWT dan olish
+//        UserResponse user = userClient.getProfile(userId);
 
         if (isAuthenticated) {
             // TODO: Backend dan user ma'lumotlarini olish

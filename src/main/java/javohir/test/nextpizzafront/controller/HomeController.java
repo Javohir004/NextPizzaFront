@@ -1,5 +1,6 @@
 package javohir.test.nextpizzafront.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import javohir.test.nextpizzafront.client.PizzaClient;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class HomeController {
+public class HomeController extends BaseController {
 
     private final PizzaClient pizzaClient;
 
@@ -21,7 +22,8 @@ public class HomeController {
     private String baseUrl;
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model , HttpServletRequest request) {
+        addNavbarAttributes(model, request);
         try {
             List<PizzaResponse> pizzas = pizzaClient.getAllPizzas();
             int limit = Math.min(6, pizzas.size());

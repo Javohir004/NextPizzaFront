@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mening Profilim - NextPizza</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: #fafafa;
+    }
+
+    /* Hero */
+    .profile-hero {
+      background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+      url('/images/ChatGPT Image Feb 12, 2026, 10_50_03 AM.png');
+      background-size: cover;
+      background-position: center;
+      padding: 80px 0;
+      color: white;
+    }
+
+    .profile-card {
+      border: none;
+      border-radius: 18px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+      transition: 0.3s ease;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff4d4d, #e63946);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      color: white;
+      margin: 0 auto 20px auto;
+    }
+
+    .balance-box {
+      background: #fff5f3;
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .balance-box h3 {
+      color: #e63946;
+      font-weight: 700;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+
+    .form-control:focus {
+      border-color: #e63946;
+      box-shadow: 0 0 0 0.2rem rgba(230,57,70,0.15);
+    }
+
+    .btn-primary {
+      background-color: #e63946;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+    }
+
+    .btn-primary:hover {
+      background-color: #c62828;
+    }
+
+    .section-card {
+      border: none;
+      border-radius: 18px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+    }
+  </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- HERO -->
+<section class="profile-hero text-center">
+  <div class="container">
+    <h1 class="fw-bold">👤 Mening Profilim</h1>
+    <p>Shaxsiy ma'lumotlaringizni boshqaring</p>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<div class="container py-5">
+  <div class="row g-4">
+
+    <!-- LEFT PROFILE CARD -->
+    <div class="col-lg-4">
+      <div class="card profile-card p-4 text-center">
+
+        <div class="avatar">
+          <span th:text="${#strings.substring(user.firstName,0,1)}">A</span>
+        </div>
+
+        <h4 class="fw-bold"
+            th:text="${user.firstName + ' ' + user.lastName}">
+          Ism Familiya
+        </h4>
+
+        <p class="text-muted mb-1" th:text="${user.email}">
+          email@example.com
+        </p>
+
+        <span class="badge bg-danger mb-3"
+              th:text="${user.role}">
+                    USER
+                </span>
+
+        <div class="balance-box mt-3">
+          <small class="text-muted">Balans</small>
+          <h3>
+                        <span th:text="${#numbers.formatDecimal(user.balance,0,'COMMA',0,'POINT')}">
+                            0
+                        </span> so'm
+          </h3>
+        </div>
+
+        <div class="mt-3 text-muted small">
+          Ro'yxatdan o'tgan:
+          <br>
+          <span th:text="${#temporals.format(user.createdDate,'dd.MM.yyyy')}">
+                        01.01.2026
+                    </span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT EDIT FORM -->
+    <div class="col-lg-8">
+      <div class="card section-card p-4">
+
+        <h5 class="fw-bold mb-4">Profilni tahrirlash</h5>
+
+        <form action="/profile/update" method="post">
+          <div class="row g-3">
+
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input type="email"
+                     class="form-control"
+                     name="email"
+                     th:value="${user.email}">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Telefon</label>
+              <input type="tel"
+                     class="form-control"
+                     name="phoneNumber"
+                     th:value="${user.phoneNumber}">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Ism</label>
+              <input type="text"
+                     class="form-control"
+                     name="firstName"
+                     th:value="${user.firstName}">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Familiya</label>
+              <input type="text"
+                     class="form-control"
+                     name="lastName"
+                     th:value="${user.lastName}">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Tug'ilgan kun</label>
+              <input type="date"
+                     class="form-control"
+                     name="birthDate"
+                     th:value="${user.birthDate}">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Manzil</label>
+              <textarea class="form-control"
+                        name="address"
+                        rows="3"
+                        th:text="${user.address}">
+                            </textarea>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Yangi parol</label>
+              <input type="password"
+                     class="form-control"
+                     name="password"
+                     placeholder="Parolni o'zgartirmoqchi bo'lsangiz kiriting">
+              <small class="text-muted">
+                Bo'sh qoldirilsa eski parol saqlanadi
+              </small>
+            </div>
+
+          </div>
+
+          <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+              💾 Saqlash
+            </button>
+            <a href="/pizzas" class="btn btn-outline-secondary">
+              Bekor qilish
+            </a>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
