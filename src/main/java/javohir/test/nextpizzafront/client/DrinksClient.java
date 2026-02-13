@@ -15,6 +15,6 @@ public interface DrinksClient {
     @GetMapping("/drink/find-all")
     List<DrinkResponse> getAllDrinks();
 
-    @GetMapping("/drinks/type/{type}")
+    @GetMapping("/drink/get-by-type/{type}")
     List<DrinkResponse> getDrinksByType(@PathVariable DrinkType type);
 }
