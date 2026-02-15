@@ -3,9 +3,11 @@ package javohir.test.nextpizzafront.config;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+@Slf4j
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 
@@ -21,12 +23,13 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        // Check JWT cookie
-        if (hasValidToken(request)) {
-            return true;
+        // JWT cookie bormi?
+        if (hasJwtCookie(request)) {
+            return true;  // OK
         }
 
-        // Redirect to login
+        // JWT yo'q - login ga redirect
+        log.warn("Unauthorized access to: {}", uri);
         response.sendRedirect("/login?error=Tizimga kirish kerak");
         return false;
     }
@@ -35,13 +38,14 @@ public class AuthInterceptor implements HandlerInterceptor {
         return uri.equals("/") ||
                 uri.equals("/login") ||
                 uri.equals("/register") ||
+                uri.equals("/logout") ||
                 uri.startsWith("/css") ||
                 uri.startsWith("/js") ||
                 uri.startsWith("/images") ||
-                uri.startsWith("/uploads");
+                uri.startsWith("/error");
     }
 
-    private boolean hasValidToken(HttpServletRequest request) {
+    private boolean hasJwtCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {

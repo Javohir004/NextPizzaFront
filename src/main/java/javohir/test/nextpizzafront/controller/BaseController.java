@@ -4,50 +4,71 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import javohir.test.nextpizzafront.client.UserClient;
 import javohir.test.nextpizzafront.dto.response.UserResponse;
-import javohir.test.nextpizzafront.util.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
 
 public class BaseController {
 
     @Autowired
-    private UserClient userClient;
-
-    @Autowired
-    private  JwtUtil jwtUtil;
+    private  UserClient userClient;
 
     /**
      * Navbar uchun ma'lumotlarni qo'shish
      */
     protected void addNavbarAttributes(Model model, HttpServletRequest request) {
-        // JWT token bor-yo'qligini tekshirish
-        boolean isAuthenticated = isUserAuthenticated(request);
-        model.addAttribute("isAuthenticated", isAuthenticated);
+        if (hasJwtCookie(request)) {
+            try {
+                // Backend dan user ma'lumotlarini olish
+                UserResponse user = userClient.getCurrentUser();
 
-//        Long userId = jwtUtil.getUserIdFromRequest(request); // JWT dan olish
-//        UserResponse user = userClient.getProfile(userId);
+                model.addAttribute("isAuthenticated", true);
+                model.addAttribute("username", user.getFirstName() + " " + user.getLastName());
+                model.addAttribute("balance", user.getBalance());
+                model.addAttribute("userId", user.getId());
+                model.addAttribute("userRole", user.getRole());
+                model.addAttribute("cartItemCount", 0);  // TODO: Cart dan olish
 
-        if (isAuthenticated) {
-            // TODO: Backend dan user ma'lumotlarini olish
-            model.addAttribute("username", "User");  // JWT dan olish kerak
-            model.addAttribute("balance", 50000);    // Backend dan olish kerak
-            model.addAttribute("cartItemCount", 3);  // Cart dan olish kerak
+            } catch (Exception e) {
+                // JWT invalid yoki expired - logout
+                model.addAttribute("isAuthenticated", false);
+            }
+        } else {
+            model.addAttribute("isAuthenticated", false);
         }
     }
 
     /**
-     * Cookie dan JWT tokenni tekshirish
+     * Cookie da JWT bormi?
      */
-    private boolean isUserAuthenticated(HttpServletRequest request) {
+    protected boolean hasJwtCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if ("JWT_TOKEN".equals(cookie.getName()) && cookie.getValue() != null) {
+                if ("JWT_TOKEN".equals(cookie.getName()) &&
+                        cookie.getValue() != null &&
+                        !cookie.getValue().isEmpty()) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    /**
+     * Cookie dan JWT tokenni olish
+     */
+    protected String getJwtFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("JWT_TOKEN".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }

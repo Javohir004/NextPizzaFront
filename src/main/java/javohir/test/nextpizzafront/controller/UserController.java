@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import javohir.test.nextpizzafront.client.UserClient;
 import javohir.test.nextpizzafront.dto.request.auth.RegisterRequest;
 import javohir.test.nextpizzafront.dto.response.UserResponse;
-import javohir.test.nextpizzafront.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,54 +18,42 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController extends BaseController {
-    private final UserClient userClient;
-    private final JwtUtil jwtUtil;
 
-    /**
-     * Profil sahifasi
-     */
+    private final UserClient userClient;
+
     @GetMapping("/profile")
-    public String profile(Model model, HttpServletRequest request)  {
-        // Navbar attributes
+    public String profile(Model model, HttpServletRequest request) {
         addNavbarAttributes(model, request);
 
         try {
-            // User ma'lumotlarini backend dan olish
-            Long userId = jwtUtil.getUserIdFromRequest(request);
-            UserResponse user = userClient.getProfile(userId);
+            UserResponse user = userClient.getCurrentUser();
             model.addAttribute("user", user);
             model.addAttribute("userUpdateRequest", new RegisterRequest());
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            model.addAttribute("user", new UserResponse()); // MUHIM
-            model.addAttribute("userUpdateRequest", new RegisterRequest());
             model.addAttribute("error", "Profilni yuklab bo'lmadi");
         }
 
         return "profile";
     }
 
-    /**
-     * Profilni yangilash
-     */
     @PostMapping("/profile/update")
     public String updateProfile(@ModelAttribute RegisterRequest request,
                                 RedirectAttributes redirectAttributes,
                                 HttpServletRequest httpRequest) {
         try {
-            // User ID ni olish (JWT dan yoki session dan)
-            // Hozircha hardcoded, keyinchalik JWT parse qilish kerak
-            Long userId = 1L; // TODO: JWT dan olish
+            // User ID ni backend dan olish
+            UserResponse currentUser = userClient.getCurrentUser();
 
-            userClient.updateUser(userId, request);
+            // Update
+            userClient.updateUser(currentUser.getId(), request);
 
-            redirectAttributes.addFlashAttribute("success", "Profil muvaffaqiyatli yangilandi!");
+            redirectAttributes.addFlashAttribute("success", "Profil yangilandi!");
 
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Profilni yangilashda xatolik: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Xatolik: " + e.getMessage());
         }
 
-        return "redirect:/profile";
+        return "redirect:/user/profile";
     }
 }
