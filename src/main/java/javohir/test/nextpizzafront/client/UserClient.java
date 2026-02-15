@@ -22,4 +22,11 @@ public interface UserClient {
 
     @PutMapping("/user/update/{id}")
     UserResponse updateUser(@PathVariable Long id, @RequestBody RegisterRequest request);
+
+    /**
+     * Joriy userni olish (JWT dan)
+     */
+    @GetMapping("/user/me")
+    UserResponse getCurrentUser();
+
 }
