@@ -94,9 +94,9 @@ public class AuthController extends BaseController {
      */
     @GetMapping("/register")
     public String registerPage(Model model, HttpServletRequest request) {
-//        if (hasJwtCookie(request)) {
-//            return "redirect:/pizzas";
-//        }
+        if (hasJwtCookie(request)) {
+            return "redirect:/pizzas";
+        }
 
         model.addAttribute("registerRequest", new RegisterRequest());
         return "auth/register";

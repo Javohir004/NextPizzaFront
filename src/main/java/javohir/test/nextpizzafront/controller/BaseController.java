@@ -1,19 +1,25 @@
 package javohir.test.nextpizzafront.controller;
 
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import javohir.test.nextpizzafront.client.CartClient;
 import javohir.test.nextpizzafront.client.UserClient;
 import javohir.test.nextpizzafront.dto.response.UserResponse;
-import lombok.RequiredArgsConstructor;
+import javohir.test.nextpizzafront.dto.response.cart.CartResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
+
+import java.util.Arrays;
 
 
 public class BaseController {
 
     @Autowired
     private  UserClient userClient;
+
+    @Autowired
+    private CartClient cartClient;
 
     /**
      * Navbar uchun ma'lumotlarni qo'shish
@@ -23,13 +29,22 @@ public class BaseController {
             try {
                 // Backend dan user ma'lumotlarini olish
                 UserResponse user = userClient.getCurrentUser();
+                // Cart count olish
+                int cartCount = 0;
+                try {
+                    CartResponse cart = cartClient.getCart();
+                    cartCount = cart.getTotalItems() != null ? cart.getTotalItems() : 0;
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    System.out.println(Arrays.toString(e.getStackTrace()));
+                }
 
                 model.addAttribute("isAuthenticated", true);
                 model.addAttribute("username", user.getFirstName() + " " + user.getLastName());
                 model.addAttribute("balance", user.getBalance());
                 model.addAttribute("userId", user.getId());
                 model.addAttribute("userRole", user.getRole());
-                model.addAttribute("cartItemCount", 0);  // TODO: Cart dan olish
+                model.addAttribute("cartItemCount", cartCount);  // TODO: Cart dan olish
 
             } catch (Exception e) {
                 // JWT invalid yoki expired - logout
