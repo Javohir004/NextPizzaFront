@@ -96,13 +96,13 @@
                             <!-- Image -->
                             <div class="col-md-2">
                                 <img th:if="${item.pizzaId != null}"
-                                     th:src="'http://localhost:8080/uploads/pizzas/' + ${item.imageUrl}"
+                                     th:src="'http://localhost:3000/uploads/pizzas/' + ${item.imageUrl}"
                                      class="img-fluid rounded"
                                      th:alt="${item.pizzaName}"
                                      onerror="this.src='https://via.placeholder.com/100?text=Pizza'">
 
                                 <img th:if="${item.drinkId != null}"
-                                     th:src="'http://localhost:8080/uploads/drinks/' + ${item.imageUrl}"
+                                     th:src="'http://localhost:3000/uploads/drinks/' + ${item.imageUrl}"
                                      class="img-fluid rounded"
                                      th:alt="${item.drinkName}"
                                      onerror="this.src='https://via.placeholder.com/100?text=Drink'">
