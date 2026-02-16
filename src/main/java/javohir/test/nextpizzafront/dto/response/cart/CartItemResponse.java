@@ -19,5 +19,5 @@ public class CartItemResponse {
     private BigDecimal price;
     private BigDecimal totalPrice;
     private String imageUrl;
-    private boolean isActive;
+    private boolean active;
 }
