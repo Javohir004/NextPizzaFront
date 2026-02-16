@@ -32,7 +32,7 @@ public class CartController extends BaseController {
         try {
             CartResponse cart = cartClient.getCart();
             model.addAttribute("cart", cart);
-            System.out.println(cart.);
+            System.out.println(cart.getTotalItems());
 
         } catch (FeignException e) {
             log.error("Error fetching cart: {}", e.getMessage());
