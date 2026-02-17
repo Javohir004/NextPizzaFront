@@ -12,22 +12,24 @@ import java.util.List;
 @FeignClient(name = "order-service", url = "${api.base-url}")
 public interface OrderClient {
 
-    @PostMapping("/orders")
+    @PostMapping("order/create-orders")
     OrderResponse createOrder(@RequestBody CreateOrderRequest request);
 
-    @GetMapping("/orders/my-orders")
+    @GetMapping("/order/my-orders")
     List<OrderResponse> getMyOrders();
 
-    @GetMapping("/orders/{orderId}")
+    @GetMapping("/order/{orderId}")
     OrderResponse getOrderById(@PathVariable Long orderId);
 
-    @PutMapping("/orders/{orderId}/cancel")
+    @PutMapping("/order/{orderId}/cancel")
     OrderResponse cancelOrder(@PathVariable Long orderId);
 
     // Admin endpoints
-    @GetMapping("/orders/admin/all")
+    @GetMapping("/order/admin/all")
     List<OrderResponse> getAllOrders();
 
-    @PutMapping("/orders/admin/{orderId}/status")
+    @PutMapping("/order/admin/{orderId}/status")
     OrderResponse updateStatus(@PathVariable Long orderId, @RequestBody UpdateOrderStatusRequest request);
+
+
 }
