@@ -5,122 +5,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Savat - NextPizza</title>
 
-    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        .cart-item {
-            transition: all 0.3s;
+        body {
+            background: linear-gradient(180deg, #fff8f0 0%, #f3efe8 100%);
         }
-        .cart-item:hover {
-            background-color: #f8f9fa;
+
+        .page-header {
+            background:
+                    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                    url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
         }
+
+        .cart-card {
+            border: none;
+            border-radius: 14px;
+            transition: 0.3s ease;
+        }
+
+        .cart-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
         .quantity-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
+
         .quantity-controls button {
             width: 35px;
             height: 35px;
             padding: 0;
         }
+
         .quantity-controls input {
-            width: 60px;
+            width: 55px;
             text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #e63946;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #c62828;
+        }
+
+        footer {
+            background-color: #111;
         }
     </style>
 </head>
 <body>
 
-<!-- Navbar -->
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<!-- Page Header -->
-<div class="bg-light py-4">
+<section class="page-header text-center">
     <div class="container">
-        <h1 class="mb-0">🛒 Mening Savatim</h1>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="/">Bosh sahifa</a></li>
-                <li class="breadcrumb-item active">Savat</li>
-            </ol>
-        </nav>
+        <h1 class="fw-bold">🛒 Mening Savatim</h1>
+        <p class="lead">
+            Jami:
+            <strong th:text="${cart != null ? cart.totalItems : 0}">0</strong>
+            ta mahsulot
+        </p>
     </div>
-</div>
+</section>
 
-<!-- Main Content -->
 <div class="container py-5">
 
-    <!-- Success/Error Messages -->
-    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <!-- Alerts -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
         <span th:text="${success}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
-    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
         <span th:text="${error}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
     <div class="row">
-        <!-- Cart Items (Left) -->
+
+        <!-- LEFT: CART ITEMS -->
         <div class="col-lg-8">
 
-            <!-- Empty Cart -->
+            <!-- EMPTY -->
             <div th:if="${cart == null or cart.items.isEmpty()}" class="text-center py-5">
-                <h3 class="text-muted mb-4">😕 Savatda mahsulot yo'q</h3>
+                <h3 class="text-muted mb-4">😕 Savatda mahsulot yo‘q</h3>
                 <p class="mb-4">Hoziroq pitsalar va ichimliklarni tanlang!</p>
                 <a href="/pizzas" class="btn btn-primary me-2">🍕 Pitsalar</a>
-                <a href="/drinks" class="btn btn-outline-primary">🥤 Ichimliklar</a>
+                <a href="/drinks" class="btn btn-outline-danger">🥤 Ichimliklar</a>
             </div>
 
-            <!-- Cart Items List -->
+            <!-- ITEMS -->
             <div th:if="${cart != null and !cart.items.isEmpty()}">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4>Mahsulotlar (<span th:text="${cart.totalItems}">0</span> ta)</h4>
 
-                    <!-- Clear Cart Button -->
-                    <form action="/cart/clear" method="post" onsubmit="return confirm('Savatni tozalamoqchimisiz?')">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-bold">
+                        Mahsulotlar (<span th:text="${cart.totalItems}">0</span> ta)
+                    </h4>
+
+                    <form action="/cart/clear" method="post"
+                          onsubmit="return confirm('Savatni tozalamoqchimisiz?')">
                         <button type="submit" class="btn btn-outline-danger btn-sm">
-                            🗑️ Barchasini o'chirish
+                            🗑️ Barchasini o‘chirish
                         </button>
                     </form>
                 </div>
 
-                <!-- Cart Items -->
-                <div class="card mb-3 cart-item" th:each="item : ${cart.items}">
+                <div class="card mb-3 cart-card" th:each="item : ${cart.items}">
                     <div class="card-body">
                         <div class="row align-items-center">
 
-                            <!-- Image -->
+                            <!-- IMAGE -->
                             <div class="col-md-2">
                                 <img th:if="${item.pizzaId != null}"
                                      th:src="'http://localhost:3000/uploads/pizzas/' + ${item.imageUrl}"
                                      class="img-fluid rounded"
-                                     th:alt="${item.pizzaName}"
                                      onerror="this.src='https://via.placeholder.com/100?text=Pizza'">
 
                                 <img th:if="${item.drinkId != null}"
                                      th:src="'http://localhost:3000/uploads/drinks/' + ${item.imageUrl}"
                                      class="img-fluid rounded"
-                                     th:alt="${item.drinkName}"
                                      onerror="this.src='https://via.placeholder.com/100?text=Drink'">
                             </div>
 
-                            <!-- Product Info -->
+                            <!-- NAME -->
                             <div class="col-md-4">
-                                <h5 class="mb-1" th:text="${item.pizzaName != null ? item.pizzaName : item.drinkName}">
+                                <h5 class="fw-bold mb-1"
+                                    th:text="${item.pizzaName != null ? item.pizzaName : item.drinkName}">
                                     Mahsulot nomi
                                 </h5>
                                 <p class="text-muted mb-0">
-                                    Narx: <strong th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' so\'m'">
-                                    0 so'm
-                                </strong>
+                                    Narx:
+                                    <strong th:text="${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')} + ' so\'m'">
+                                        0 so'm
+                                    </strong>
                                 </p>
                             </div>
 
-                            <!-- Quantity Controls -->
+                            <!-- QUANTITY -->
                             <div class="col-md-3">
                                 <div class="quantity-controls">
                                     <button class="btn btn-outline-secondary"
@@ -130,9 +162,7 @@
 
                                     <input type="number"
                                            class="form-control"
-                                           th:id="'quantity-' + ${item.id}"
                                            th:value="${item.quantity}"
-                                           min="1"
                                            readonly>
 
                                     <button class="btn btn-outline-secondary"
@@ -142,17 +172,21 @@
                                 </div>
                             </div>
 
-                            <!-- Total Price -->
+                            <!-- TOTAL -->
                             <div class="col-md-2">
-                                <h5 class="text-primary mb-0" th:id="'total-' + ${item.id}">
-                                    <span th:text="${#numbers.formatDecimal(item.totalPrice, 0, 'COMMA', 0, 'POINT')}">0</span> so'm
+                                <h5 class="text-danger fw-bold mb-0">
+                                    <span th:text="${#numbers.formatDecimal(item.totalPrice,0,'COMMA',0,'POINT')}">
+                                        0
+                                    </span>
+                                    so'm
                                 </h5>
                             </div>
 
-                            <!-- Remove Button -->
-                            <div class="col-md-1">
+                            <!-- REMOVE -->
+                            <div class="col-md-1 text-end">
                                 <form th:action="@{/cart/remove/{id}(id=${item.id})}" method="post">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="O'chirish">
+                                    <button type="submit"
+                                            class="btn btn-outline-danger btn-sm">
                                         🗑️
                                     </button>
                                 </form>
@@ -161,18 +195,21 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
-        <!-- Order Summary (Right) -->
-        <div class="col-lg-4" th:if="${cart != null and !cart.items.isEmpty()}">
-            <div class="card sticky-top" style="top: 20px;">
-                <div class="card-header bg-primary text-white">
+        <!-- RIGHT: SUMMARY -->
+        <div class="col-lg-4"
+             th:if="${cart != null and !cart.items.isEmpty()}">
+
+            <div class="card cart-card sticky-top" style="top: 20px;">
+                <div class="card-header bg-danger text-white">
                     <h5 class="mb-0">📋 Buyurtma xulosasi</h5>
                 </div>
+
                 <div class="card-body">
 
-                    <!-- Items count -->
                     <div class="d-flex justify-content-between mb-2">
                         <span>Mahsulotlar:</span>
                         <strong th:text="${cart.totalItems} + ' ta'">0 ta</strong>
@@ -180,66 +217,54 @@
 
                     <hr>
 
-                    <!-- Total Price -->
                     <div class="d-flex justify-content-between mb-3">
-                        <h5>Jami:</h5>
-                        <h5 class="text-primary" id="grandTotal">
-                            <span th:text="${#numbers.formatDecimal(cart.totalPrice, 0, 'COMMA', 0, 'POINT')}">0</span> so'm
+                        <h5 class="fw-bold">Jami:</h5>
+                        <h5 class="text-danger fw-bold">
+                            <span th:text="${#numbers.formatDecimal(cart.totalPrice,0,'COMMA',0,'POINT')}">
+                                0
+                            </span>
+                            so'm
                         </h5>
                     </div>
 
-                    <!-- Checkout Button -->
-                    <a href="/checkout" class="btn btn-success w-100 btn-lg mb-2">
+                    <a href="/checkout"
+                       class="btn btn-primary w-100 btn-lg mb-2">
                         💳 Buyurtma berish
                     </a>
 
-                    <!-- Continue Shopping -->
-                    <a href="/pizzas" class="btn btn-outline-primary w-100">
-                        🍕 Xarid davom etish
+                    <a href="/pizzas"
+                       class="btn btn-outline-danger w-100">
+                        🍕 Xarid davom ettirish
                     </a>
+
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 
-<!-- Footer -->
-<footer class="bg-dark text-white text-center py-4 mt-5">
+<footer class="text-white text-center py-4 mt-5">
     <div class="container">
         <p class="mb-0">&copy; 2026 NextPizza. Barcha huquqlar himoyalangan.</p>
     </div>
 </footer>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Quantity Update Script -->
 <script>
     function updateQuantity(itemId, newQuantity) {
         if (newQuantity < 1) {
-            if (confirm('Mahsulotni o\'chirmoqchimisiz?')) {
-                // Remove item
-                window.location.href = '/cart/remove/' + itemId;
+            if (confirm("Mahsulotni o‘chirmoqchimisiz?")) {
+                window.location.href = "/cart/remove/" + itemId;
             }
             return;
         }
 
-        // AJAX request
-        fetch('/cart/update/' + itemId + '?quantity=' + newQuantity, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Update UI
-                location.reload();  // Simple reload (yoki AJAX bilan update)
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Xatolik yuz berdi');
-            });
+        fetch("/cart/update/" + itemId + "?quantity=" + newQuantity, {
+            method: "POST"
+        }).then(() => location.reload())
+            .catch(() => alert("Xatolik yuz berdi"));
     }
 </script>
 
