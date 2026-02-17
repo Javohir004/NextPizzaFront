@@ -143,7 +143,7 @@
 
           <div th:if="${isAuthenticated}">
             <form th:action="@{/cart/add-pizza}" method="post" class="d-flex gap-2">
-              <input type="hidden" name="foodId" th:value="${pizza.foodId}">
+              <input type="hidden" name="pizzaId" th:value="${pizza.pizzaId}">
 
               <select name="quantity"
                       class="form-select form-select-sm"
