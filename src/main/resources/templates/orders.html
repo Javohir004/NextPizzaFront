@@ -92,15 +92,15 @@
         <div class="card-header d-flex justify-content-between align-items-center bg-transparent border-0 pt-4 px-4">
           <strong>Buyurtma #<span th:text="${order.id}">1</span></strong>
 
-          <!-- Status Badge -->
-          <span th:switch="${order.orderStatus}">
-           <span th:case="'CREATED'" class="badge bg-info">CREATED</span>
-           <span th:case="'COOKING'" class="badge bg-warning text-dark">COOKING</span>
-           <span th:case="'DELIVERING'" class="badge bg-primary">DELIVERING</span>
-           <span th:case="'COMPLETED'" class="badge bg-success">COMPLETED</span>
-           <span th:case="'CANCELLED'" class="badge bg-danger">CANCELLED</span>
-           <span th:case="*" class="badge bg-secondary">UNKNOWN</span>  <!-- ← Default -->
-          </span>
+          <!-- Status Badge - FIXED -->
+          <span th:switch="${order.orderStatus.name()}">  <!-- ← .name() -->
+         <span th:case="'CREATED'" class="badge bg-info">CREATED</span>
+         <span th:case="'COOKING'" class="badge bg-warning text-dark">COOKING</span>
+         <span th:case="'DELIVERING'" class="badge bg-primary">DELIVERING</span>
+         <span th:case="'COMPLETED'" class="badge bg-success">COMPLETED</span>
+         <span th:case="'CANCELLED'" class="badge bg-danger">CANCELLED</span>
+         <span th:case="*" class="badge bg-secondary">UNKNOWN</span>
+        </span>
         </div>
 
         <div class="card-body px-4">
@@ -108,8 +108,8 @@
           <p class="text-muted mb-2">
             📅
             <span th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}">
-              01.01.2026 12:00
-            </span>
+            01.01.2026 12:00
+          </span>
           </p>
 
           <p class="mb-2">
@@ -122,8 +122,8 @@
           <h5 class="text-danger fw-bold mb-3">
             💰
             <span th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')}">
-              0
-            </span>
+            0
+          </span>
             so'm
           </h5>
 
@@ -139,10 +139,11 @@
 
             <a th:href="@{/orders/{id}(id=${order.id})}"
                class="btn btn-outline-primary btn-sm flex-grow-1">
-              👁️ Ko‘rish
+              👁️ Ko'rish
             </a>
 
-            <form th:if="${order.orderStatus == 'CREATED' or order.orderStatus == 'COOKING'}"
+            <!-- Cancel Button - FIXED -->
+            <form th:if="${order.orderStatus.name() == 'CREATED' or order.orderStatus.name() == 'COOKING'}"
                   th:action="@{/orders/{id}/cancel(id=${order.id})}"
                   method="post"
                   onsubmit="return confirm('Buyurtmani bekor qilmoqchimisiz?')"
