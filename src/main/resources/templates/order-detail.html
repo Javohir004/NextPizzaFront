@@ -49,17 +49,17 @@
                 01.01.2026 12:00
               </p>
             </div>
+            <!-- Status Badge - FIXED -->
             <div class="col-md-6 mb-3">
               <strong>Status:</strong>
               <p>
-                                <span class="badge"
-                                      th:classappend="${order.orderStatus == 'CREATED'} ? 'bg-info' :
-                                                     ${order.orderStatus == 'COOKING'} ? 'bg-warning' :
-                                                     ${order.orderStatus == 'DELIVERING'} ? 'bg-primary' :
-                                                     ${order.orderStatus == 'COMPLETED'} ? 'bg-success' : 'bg-danger'"
-                                      th:text="${order.orderStatus}">
-                                    STATUS
-                                </span>
+        <span th:switch="${order.orderStatus}">
+            <span th:case="'CREATED'" class="badge bg-info" th:text="${order.orderStatus}">CREATED</span>
+            <span th:case="'COOKING'" class="badge bg-warning text-dark" th:text="${order.orderStatus}">COOKING</span>
+            <span th:case="'DELIVERING'" class="badge bg-primary" th:text="${order.orderStatus}">DELIVERING</span>
+            <span th:case="'COMPLETED'" class="badge bg-success" th:text="${order.orderStatus}">COMPLETED</span>
+            <span th:case="*" class="badge bg-danger" th:text="${order.orderStatus}">CANCELLED</span>
+        </span>
               </p>
             </div>
             <div class="col-md-6 mb-3">
