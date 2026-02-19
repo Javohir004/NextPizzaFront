@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uz">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<!-- Admin Navbar Fragment -->
+<nav th:fragment="admin-navbar" class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container-fluid">
+
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold" href="/admin/dashboard">
+            <span style="font-size: 1.5rem;">🍕</span> NextPizza Admin
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Items -->
+        <div class="collapse navbar-collapse" id="adminNavbar">
+
+            <!-- Left Menu -->
+            <ul class="navbar-nav me-auto">
+
+                <!-- Dashboard -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/dashboard">
+                        📊 Dashboard
+                    </a>
+                </li>
+
+                <!-- Pizzas -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/pizzas">
+                        🍕 Pitsalar
+                    </a>
+                </li>
+
+                <!-- Drinks -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/drinks">
+                        🥤 Ichimliklar
+                    </a>
+                </li>
+
+                <!-- Orders -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/orders">
+                        📦 Buyurtmalar
+                    </a>
+                </li>
+
+                <!-- Users (Owner only) -->
+                <li class="nav-item" th:if="${userRole == 'OWNER'}">
+                    <a class="nav-link" href="/admin/users">
+                        👥 Foydalanuvchilar
+                    </a>
+                </li>
+
+            </ul>
+
+            <!-- Right Menu -->
+            <ul class="navbar-nav ms-auto">
+
+                <!-- Role Badge -->
+                <li class="nav-item">
+                    <span class="nav-link">
+                        <span class="badge bg-warning text-dark" th:text="${userRole}">ADMIN</span>
+                    </span>
+                </li>
+
+                <!-- Profile Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        👤 <span th:text="${username}">Admin</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="/user/profile">
+                                👤 Profil
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/pizzas">
+                                🍕 User panelga o'tish
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="/logout">
+                                🚪 Chiqish
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>
