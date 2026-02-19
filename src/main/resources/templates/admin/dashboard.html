@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NextPizza Admin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .page-header {
+            background: linear-gradient(90deg, #ff6b00, #ff914d);
+            color: white;
+            padding: 35px 30px;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .stat-card {
+            border-radius: 18px;
+            transition: all 0.25s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .stat-icon {
+            font-size: 2.8rem;
+        }
+
+        .card {
+            border-radius: 18px;
+        }
+
+        .btn-outline-primary {
+            border-color: #ff6b00;
+            color: #ff6b00;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #ff6b00;
+            color: white;
+        }
+
+        .badge {
+            font-weight: 500;
+            padding: 6px 10px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/admin-navbar :: admin-navbar}"></div>
+
+<!-- Header -->
+<div class="page-header shadow-sm mb-4">
+    <div class="container-fluid">
+        <h1 class="fw-bold mb-1">📊 Admin Dashboard</h1>
+        <p class="mb-0 opacity-75">Umumiy statistika va real vaqt ma'lumotlari</p>
+    </div>
+</div>
+
+<div class="container-fluid py-4">
+
+    <!-- Stats -->
+    <div class="row mb-4 g-4">
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card shadow-sm border-0 text-center p-4">
+                <div class="stat-icon text-primary mb-2">📦</div>
+                <h3 class="fw-bold mb-1" th:text="${totalOrders}">0</h3>
+                <small class="text-muted">Jami buyurtmalar</small>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card shadow-sm border-0 text-center p-4">
+                <div class="stat-icon text-success mb-2">💰</div>
+                <h3 class="fw-bold mb-1">
+                    <span th:text="${#numbers.formatDecimal(totalRevenue, 0, 'COMMA', 0, 'POINT')}">0</span>
+                </h3>
+                <small class="text-muted">Jami daromad (so'm)</small>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card shadow-sm border-0 text-center p-4">
+                <div class="stat-icon text-info mb-2">👥</div>
+                <h3 class="fw-bold mb-1" th:text="${activeUsers}">0</h3>
+                <small class="text-muted">Faol foydalanuvchilar</small>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card shadow-sm border-0 text-center p-4">
+                <div class="stat-icon text-warning mb-2">📅</div>
+                <h3 class="fw-bold mb-1" th:text="${todayOrders}">0</h3>
+                <small class="text-muted">Bugungi buyurtmalar</small>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-semibold">📦 So'nggi buyurtmalar</h5>
+            <a href="/admin/orders" class="btn btn-sm btn-outline-primary">
+                Barchasini ko'rish →
+            </a>
+        </div>
+
+        <div class="card-body p-0">
+
+            <div th:if="${recentOrders == null or recentOrders.isEmpty()}"
+                 class="text-center py-5 text-muted">
+                Buyurtmalar mavjud emas
+            </div>
+
+            <div th:if="${recentOrders != null and !recentOrders.isEmpty()}"
+                 class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Sana</th>
+                        <th>Mijoz</th>
+                        <th>Mahsulot</th>
+                        <th>Summa</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="order : ${recentOrders}">
+                        <td><strong>#<span th:text="${order.id}">1</span></strong></td>
+
+                        <td th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}"></td>
+
+                        <td th:text="${order.userId}"></td>
+
+                        <td th:text="${order.totalItems} + ' ta'"></td>
+
+                        <td>
+                            <strong th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' so\'m'"></strong>
+                        </td>
+
+                        <td>
+                            <span th:switch="${order.orderStatus.name()}">
+                                <span th:case="'CREATED'" class="badge bg-secondary">Yaratildi</span>
+                                <span th:case="'COOKING'" class="badge bg-warning text-dark">Tayyorlanmoqda</span>
+                                <span th:case="'DELIVERING'" class="badge bg-primary">Yetkazilmoqda</span>
+                                <span th:case="'COMPLETED'" class="badge bg-success">Yetkazildi</span>
+                                <span th:case="'CANCELLED'" class="badge bg-danger">Bekor qilindi</span>
+                            </span>
+                        </td>
+
+                        <td>
+                            <a th:href="@{/admin/orders/{id}(id=${order.id})}"
+                               class="btn btn-sm btn-outline-primary">
+                                Ko'rish
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer class="text-center py-4 mt-5 text-muted small">
+    © 2026 NextPizza Admin Panel
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

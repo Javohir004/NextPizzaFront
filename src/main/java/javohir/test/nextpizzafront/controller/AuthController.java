@@ -5,8 +5,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import javohir.test.nextpizzafront.client.AuthClient;
+import javohir.test.nextpizzafront.client.UserClient;
 import javohir.test.nextpizzafront.dto.request.auth.LoginRequest;
 import javohir.test.nextpizzafront.dto.request.auth.RegisterRequest;
+import javohir.test.nextpizzafront.dto.response.UserResponse;
 import javohir.test.nextpizzafront.dto.response.auth.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,14 +25,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AuthController extends BaseController {
 
     private final AuthClient authClient;
+    private final UserClient userClient;
 
     /**
      * Login sahifasi
      */
     @GetMapping("/login")
     public String loginPage(Model model, HttpServletRequest request) {
-        // Agar allaqachon login qilgan bo'lsa
-        if (hasJwtCookie(request)) {
+        if (hasJwtCookie(request) && request.isUserInRole("USER")) {
             return "redirect:/pizzas";
         }
 
@@ -39,7 +41,7 @@ public class AuthController extends BaseController {
     }
 
     /**
-     * Login qilish
+     * Login qilish + Role-based redirect
      */
     @PostMapping("/login")
     public String login(@ModelAttribute LoginRequest request,
@@ -51,13 +53,13 @@ public class AuthController extends BaseController {
 
             // JWT ni HttpOnly cookie ga saqlash
             Cookie jwtCookie = new Cookie("JWT_TOKEN", authResponse.getAccessToken());
-            jwtCookie.setHttpOnly(true);  // XSS himoya
+            jwtCookie.setHttpOnly(true);
             jwtCookie.setSecure(false);    // Production da true
             jwtCookie.setMaxAge(86400);    // 1 kun
             jwtCookie.setPath("/");
             response.addCookie(jwtCookie);
 
-            // Refresh token (ixtiyoriy)
+            // Refresh token
             if (authResponse.getRefreshToken() != null) {
                 Cookie refreshCookie = new Cookie("REFRESH_TOKEN", authResponse.getRefreshToken());
                 refreshCookie.setHttpOnly(true);
@@ -67,26 +69,41 @@ public class AuthController extends BaseController {
                 response.addCookie(refreshCookie);
             }
 
-            log.info("User logged in successfully: {}", request.getEmail());
-            redirectAttributes.addFlashAttribute("success", "Xush kelibsiz!");
+            // USER MA'LUMOTLARINI BACKEND DAN OLISH (role bilan) ✅
+            UserResponse user = userClient.getCurrentUser();
 
-            return "redirect:/pizzas";
+            log.info("User logged in: {} - Role: {}", user.getEmail(), user.getRole());
+
+            // ROLE GA QARAB REDIRECT ✅
+            String redirectUrl = getRedirectUrlByRole(user.getRole().toString());
+
+            redirectAttributes.addFlashAttribute("success",
+                    "Xush kelibsiz, " + user.getFirstName() + " " + user.getLastName() + "!");
+
+            return "redirect:" + redirectUrl;
 
         } catch (FeignException.Unauthorized e) {
-            log.warn("Login failed - invalid credentials: {}", request.getEmail());
+            log.warn("Login failed: {}", request.getEmail());
             redirectAttributes.addFlashAttribute("error", "Email yoki parol noto'g'ri!");
             return "redirect:/login";
 
-        } catch (FeignException e) {
-            log.error("Login failed - server error: {}", e.getMessage());
-            redirectAttributes.addFlashAttribute("error", "Serverda xatolik. Qayta urinib ko'ring.");
-            return "redirect:/login";
-
         } catch (Exception e) {
-            log.error("Login failed - unexpected error: {}", e.getMessage());
+            log.error("Login error: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("error", "Xatolik: " + e.getMessage());
             return "redirect:/login";
         }
+    }
+
+    /**
+     * Role ga qarab redirect URL
+     */
+    private String getRedirectUrlByRole(String role) {
+        return switch (role) {
+            case "ADMIN" -> "/admin/dashboard";      // Admin → Dashboard
+            case "OWNER" -> "/admin/dashboard";      // Owner → Dashboard (full access)
+            case "USER" -> "/pizzas";                // User → Pizzas
+            default -> "/";                          // Unknown → Home
+        };
     }
 
     /**
