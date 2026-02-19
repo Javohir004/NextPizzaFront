@@ -32,7 +32,7 @@ public class AuthController extends BaseController {
      */
     @GetMapping("/login")
     public String loginPage(Model model, HttpServletRequest request) {
-        if (hasJwtCookie(request)) {
+        if (hasJwtCookie(request) && request.isUserInRole("USER")) {
             return "redirect:/pizzas";
         }
 
@@ -85,7 +85,7 @@ public class AuthController extends BaseController {
         } catch (FeignException.Unauthorized e) {
             log.warn("Login failed: {}", request.getEmail());
             redirectAttributes.addFlashAttribute("error", "Email yoki parol noto'g'ri!");
-            return "redirect:/";
+            return "redirect:/login";
 
         } catch (Exception e) {
             log.error("Login error: {}", e.getMessage());

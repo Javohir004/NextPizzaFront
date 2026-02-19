@@ -31,21 +31,22 @@ public class BaseController {
                 UserResponse user = userClient.getCurrentUser();
                 // Cart count olish
                 int cartCount = 0;
-                try {
-                    CartResponse cart = cartClient.getCart();
-                    cartCount = cart.getTotalItems() != null ? cart.getTotalItems() : 0;
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    System.out.println(Arrays.toString(e.getStackTrace()));
+                if (user.getRole().name().equals("USER")) {
+                    try {
+                        CartResponse cart = cartClient.getCart();
+                        cartCount = cart.getTotalItems() != null ? cart.getTotalItems() : 0;
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        System.out.println(Arrays.toString(e.getStackTrace()));
+                    }
+
+                    model.addAttribute("isAuthenticated", true);
+                    model.addAttribute("username", user.getFirstName() + " " + user.getLastName());
+                    model.addAttribute("balance", user.getBalance());
+                    model.addAttribute("userId", user.getId());
+                    model.addAttribute("userRole", user.getRole());
+                    model.addAttribute("cartItemCount", cartCount);  // TODO: Cart dan olish
                 }
-
-                model.addAttribute("isAuthenticated", true);
-                model.addAttribute("username", user.getFirstName() + " " + user.getLastName());
-                model.addAttribute("balance", user.getBalance());
-                model.addAttribute("userId", user.getId());
-                model.addAttribute("userRole", user.getRole());
-                model.addAttribute("cartItemCount", cartCount);  // TODO: Cart dan olish
-
             } catch (Exception e) {
                 // JWT invalid yoki expired - logout
                 model.addAttribute("isAuthenticated", false);
