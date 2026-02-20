@@ -5,8 +5,7 @@ import javohir.test.nextpizzafront.dto.response.DrinkResponse;
 import javohir.test.nextpizzafront.enums.DrinkType;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,11 +18,17 @@ public interface DrinksClient {
     @GetMapping("/drink/get-by-type/{type}")
     List<DrinkResponse> getDrinksByType(@PathVariable DrinkType type);
 
-    void deleteDrink(Long id);
 
-    void updateDrink(Long id, DrinkRequest request);
+    // Admin endpoints qo'shish
+    @PostMapping("/drink/create-drink")
+    DrinkResponse createDrink(@RequestBody DrinkRequest request);
 
-    DrinkResponse getDrinkById(Long id);
+    @PutMapping("/drink/update-drink/{id}")
+    DrinkResponse updateDrink(@PathVariable Long id, @RequestBody DrinkRequest request);
 
-    void createDrink(DrinkRequest request);
+    @DeleteMapping("/drink/delete-drink/{id}")
+    void deleteDrink(@PathVariable Long id);
+
+    @GetMapping("/drink/findby-id/{id}")
+    DrinkResponse getDrinkById(@PathVariable Long id);
 }
