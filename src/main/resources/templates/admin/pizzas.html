@@ -58,7 +58,7 @@
           </thead>
           <tbody>
           <tr th:each="pizza : ${pizzas}">
-            <td><strong th:text="${pizza.id}">1</strong></td>
+            <td><strong th:text="${pizza.pizzaId}">1</strong></td>
             <td>
               <img th:src="'http://localhost:3000/uploads/pizzas/' + ${pizza.imageUrl}"
                    class="rounded"
@@ -75,16 +75,16 @@
               </strong>
             </td>
             <td>
-              <span th:if="${pizza.isActive}" class="badge bg-success">Faol</span>
-              <span th:unless="${pizza.isActive}" class="badge bg-danger">Nofaol</span>
+              <span th:if="${pizza.active}" class="badge bg-success">Faol</span>
+              <span th:unless="${pizza.active}" class="badge bg-danger">Nofaol</span>
             </td>
             <td>
               <div class="btn-group btn-group-sm">
-                <a th:href="@{/admin/pizzas/edit/{id}(id=${pizza.id})}"
+                <a th:href="@{/admin/pizzas/edit/{id}(id=${pizza.pizzaId})}"
                    class="btn btn-outline-primary">
                   ✏️
                 </a>
-                <form th:action="@{/admin/pizzas/delete/{id}(id=${pizza.id})}"
+                <form th:action="@{/admin/pizzas/delete/{id}(id=${pizza.pizzaId})}"
                       method="post"
                       onsubmit="return confirm('O\'chirmoqchimisiz?')"
                       class="d-inline">
