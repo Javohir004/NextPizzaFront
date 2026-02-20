@@ -32,7 +32,9 @@ public class AdminPizzaController extends BaseController {
         addNavbarAttributes(model, request);
 
         try {
-            List<PizzaResponse> pizzas = pizzaClient.getAllPizzas();
+            List<PizzaResponse> pizzas = pizzaClient.getAllPizzasForAdmin();
+            System.out.println(pizzas.size());
+
             model.addAttribute("pizzas", pizzas);
 
         } catch (Exception e) {

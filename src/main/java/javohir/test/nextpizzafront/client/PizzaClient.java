@@ -36,4 +36,6 @@ public interface PizzaClient {
     @GetMapping("/pizza/{id}")
     PizzaResponse getPizzaById(@PathVariable Long id);
 
+    @GetMapping("/pizza/all-pizza-for-admin")
+    List<PizzaResponse> getAllPizzasForAdmin();
 }
