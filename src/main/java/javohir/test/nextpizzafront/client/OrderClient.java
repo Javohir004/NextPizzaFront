@@ -24,12 +24,14 @@ public interface OrderClient {
     @PutMapping("/order/{orderId}/cancel")
     OrderResponse cancelOrder(@PathVariable Long orderId);
 
+
     // Admin endpoints
     @GetMapping("/order/admin/all")
     List<OrderResponse> getAllOrders();
 
+    @GetMapping("/order/admin/status/{status}")
+    List<OrderResponse> getOrdersByStatus(@PathVariable String status);
+
     @PutMapping("/order/admin/{orderId}/status")
-    OrderResponse updateStatus(@PathVariable Long orderId, @RequestBody UpdateOrderStatusRequest request);
-
-
+    OrderResponse updateOrderStatus(@PathVariable Long orderId, @RequestBody UpdateOrderStatusRequest request);
 }
