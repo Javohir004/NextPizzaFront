@@ -4,27 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ichimliklar - NextPizza Admin</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(180deg, #fff8f0 0%, #f3efe8 100%);
+        }
+
+        .page-header {
+            background:
+                    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                    url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+        }
+
+        .card-soft {
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: 0.3s ease;
+        }
+
+        .card-soft:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary {
+            background-color: #e63946;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #c62828;
+        }
+
+        .table img {
+            border-radius: 8px;
+        }
+
+        .badge {
+            font-size: 0.85rem;
+        }
+
+        footer {
+            background-color: #111;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 40px;
+            border-radius: 12px;
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 
 <!-- Admin Navbar -->
 <div th:replace="~{fragments/admin-navbar :: admin-navbar}"></div>
 
 <!-- Page Header -->
-<div class="bg-white py-4 mb-4 shadow-sm">
-    <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h1 class="mb-0">🥤 Ichimliklar</h1>
-                <p class="text-muted mb-0">Ichimliklarni boshqarish</p>
-            </div>
-            <a href="/admin/drinks/create" class="btn btn-primary">
-                ➕ Yangi ichimlik
-            </a>
-        </div>
+<section class="page-header">
+    <div class="container text-center">
+        <h1>🥤 Ichimliklar</h1>
+        <p class="lead">Ichimliklarni boshqarish</p>
+        <a href="/admin/drinks/create" class="btn btn-primary btn-lg mt-3">
+            ➕ Yangi ichimlik
+        </a>
     </div>
-</div>
+</section>
 
 <!-- Main Content -->
 <div class="container-fluid py-4">
@@ -35,70 +91,66 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
     <!-- Drinks Table -->
-    <div class="card border-0 shadow-sm">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Rasm</th>
-                        <th>Nomi</th>
-                        <th>Turi</th>
-                        <th>Hajm</th>
-                        <th>Narx</th>
-                        <th>Status</th>
-                        <th>Amallar</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="drink : ${drinks}">
-                        <td><strong th:text="${drink.id}">1</strong></td>
-                        <td>
-                            <img th:src="'http://localhost:3000/uploads/drinks/' + ${drink.imageUrl}"
-                                 class="rounded"
-                                 style="width: 50px; height: 50px; object-fit: cover;"
-                                 onerror="this.src='https://via.placeholder.com/50?text=Drink'">
-                        </td>
-                        <td><strong th:text="${drink.drinkName}">Drink</strong></td>
-                        <td>
-                            <span class="badge bg-info" th:text="${drink.drinkType}">TYPE</span>
-                        </td>
-                        <td th:text="${drink.volume} + ' L'">0 L</td>
-                        <td>
-                            <strong th:text="${#numbers.formatDecimal(drink.price, 0, 'COMMA', 0, 'POINT')} + ' so\'m'">
-                                0 so'm
-                            </strong>
-                        </td>
-                        <td>
-                            <span th:if="${drink.isActive}" class="badge bg-success">Faol</span>
-                            <span th:unless="${drink.isActive}" class="badge bg-danger">Nofaol</span>
-                        </td>
-                        <td>
-                            <div class="btn-group btn-group-sm">
-                                <a th:href="@{/admin/drinks/edit/{id}(id=${drink.id})}"
-                                   class="btn btn-outline-primary">
-                                    ✏️
-                                </a>
-                                <form th:action="@{/admin/drinks/delete/{id}(id=${drink.id})}"
-                                      method="post"
-                                      onsubmit="return confirm('O\'chirmoqchimisiz?')"
-                                      class="d-inline">
-                                    <button type="submit" class="btn btn-outline-danger">
-                                        🗑️
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+    <div class="card card-soft p-3">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>No</th>
+                    <th>ID</th>
+                    <th>Rasm</th>
+                    <th>Nomi</th>
+                    <th>Turi</th>
+                    <th>Hajm</th>
+                    <th>Narx</th>
+                    <th>Status</th>
+                    <th>Amallar</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="drink, iterStat : ${drinks}">
+                    <!-- Tartib raqam -->
+                    <td th:text="${iterStat.count}">1</td>
+                    <td><strong th:text="${drink.id}">1</strong></td>
+                    <td>
+                        <img th:src="'http://localhost:3000/uploads/drinks/' + ${drink.imageUrl}"
+                             style="width: 60px; height: 60px; object-fit: cover;"
+                             onerror="this.src='https://via.placeholder.com/60?text=Drink'"
+                             alt="Drink rasm">
+                    </td>
+                    <td><strong th:text="${drink.drinkName}">Drink</strong></td>
+                    <td><span class="badge bg-info" th:text="${drink.drinkType}">TYPE</span></td>
+                    <td th:text="${drink.volume} + ' L'">0 L</td>
+                    <td><strong th:text="${#numbers.formatDecimal(drink.price,0,'COMMA',0,'POINT')} + ' so\'m'">0 so'm</strong></td>
+                    <td>
+                        <span th:if="${drink.isActive}" class="badge bg-success">Faol</span>
+                        <span th:unless="${drink.isActive}" class="badge bg-danger">Nofaol</span>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a th:href="@{/admin/drinks/edit/{id}(id=${drink.id})}" class="btn btn-outline-primary">✏️</a>
+                            <form th:action="@{/admin/drinks/delete/{id}(id=${drink.id})}" method="post" onsubmit="return confirm('O\'chirmoqchimisiz?')" class="d-inline">
+                                <button type="submit" class="btn btn-outline-danger">🗑️</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
 </div>
+
+<footer>
+    &copy; 2026 NextPizza Admin. Barcha huquqlar himoyalangan.
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

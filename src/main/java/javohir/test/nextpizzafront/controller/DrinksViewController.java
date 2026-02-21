@@ -38,7 +38,7 @@ public class DrinksViewController extends BaseController {
             model.addAttribute("error", "Ichimliklarni yuklab bo'lmadi");
         }
 
-        return "drinks";
+        return "user/drinks";
     }
 
     /**
@@ -61,6 +61,6 @@ public class DrinksViewController extends BaseController {
             model.addAttribute("error", "Ichimliklarni yuklab bo'lmadi");
         }
 
-        return "drinks";
+        return "user/drinks";
     }
 }

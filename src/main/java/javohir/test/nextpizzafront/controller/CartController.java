@@ -39,7 +39,7 @@ public class CartController extends BaseController {
             model.addAttribute("error", "Savatni yuklab bo'lmadi");
         }
 
-        return "cart";
+        return "user/cart";
     }
 
     /**
@@ -63,7 +63,7 @@ public class CartController extends BaseController {
         }
 
         // Qayerdan kelgan bo'lsa, o'sha sahifaga qaytish
-        return "redirect:" + (referer != null ? referer : "/pizzas");
+        return "redirect:" + (referer != null ? referer : "user/pizzas");
     }
 
     /**
@@ -86,7 +86,7 @@ public class CartController extends BaseController {
             redirectAttributes.addFlashAttribute("error", "Xatolik yuz berdi");
         }
 
-        return "redirect:" + (referer != null ? referer : "/drinks");
+        return "redirect:" + (referer != null ? referer : "user/drinks");
     }
 
     /**

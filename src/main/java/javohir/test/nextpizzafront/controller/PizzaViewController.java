@@ -33,7 +33,7 @@ public class PizzaViewController extends BaseController {  // ← extends BaseCo
             model.addAttribute("pizzas", List.of());
         }
 
-        return "pizzas";
+        return "user/pizzas";
     }
 
     @GetMapping("/type/{pizzaType}")
@@ -48,7 +48,7 @@ public class PizzaViewController extends BaseController {  // ← extends BaseCo
         }catch(Exception e){
             model.addAttribute("pizzas", List.of());
         }
-        return "pizzas";
+        return "user/pizzas";
     }
 
 }

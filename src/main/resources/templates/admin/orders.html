@@ -3,100 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buyurtmalar - NextPizza Admin</title>
+    <title>📦 Buyurtmalar - NextPizza Admin</title>
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            background: linear-gradient(180deg, #fff8f0 0%, #f3efe8 100%);
+        }
+
+        .page-header {
+            background:
+                    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                    url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+        }
+
+        .card-soft {
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: 0.3s ease;
+        }
+
+        .card-soft:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary {
+            background-color: #e63946;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #c62828;
+        }
+
+        .badge {
+            font-size: 0.85rem;
+        }
+
+        footer {
+            background-color: #111;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 40px;
+            border-radius: 12px;
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 
 <!-- Admin Navbar -->
 <div th:replace="~{fragments/admin-navbar :: admin-navbar}"></div>
 
 <!-- Page Header -->
-<div class="bg-white py-4 mb-4 shadow-sm">
-    <div class="container-fluid">
-        <h1 class="mb-0">📦 Buyurtmalar</h1>
-        <p class="text-muted mb-0">Barcha buyurtmalarni boshqarish</p>
+<section class="page-header">
+    <div class="container">
+        <h1>📦 Buyurtmalar</h1>
+        <p class="lead">Barcha buyurtmalarni boshqarish</p>
     </div>
-</div>
+</section>
 
 <!-- Main Content -->
 <div class="container-fluid py-4">
 
     <!-- Filter -->
-    <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body">
-            <form method="get" class="row g-3">
-                <div class="col-md-4">
-                    <select class="form-select" name="status">
-                        <option value="">Barcha statuslar</option>
-                        <option value="CREATED">Yaratildi</option>
-                        <option value="COOKING">Tayyorlanmoqda</option>
-                        <option value="DELIVERING">Yetkazilmoqda</option>
-                        <option value="COMPLETED">Yetkazildi</option>
-                        <option value="CANCELLED">Bekor qilindi</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">
-                        🔍 Filter
-                    </button>
-                </div>
-            </form>
-        </div>
+    <div class="card card-soft mb-4 p-3">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="status" class="form-label">Status bo‘yicha filter</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="">Barcha statuslar</option>
+                    <option value="CREATED">Yaratildi</option>
+                    <option value="COOKING">Tayyorlanmoqda</option>
+                    <option value="DELIVERING">Yetkazilmoqda</option>
+                    <option value="COMPLETED">Yetkazildi</option>
+                    <option value="CANCELLED">Bekor qilindi</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">🔍 Filter</button>
+            </div>
+        </form>
     </div>
 
     <!-- Orders Table -->
-    <div class="card border-0 shadow-sm">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Sana</th>
-                        <th>Mijoz</th>
-                        <th>Mahsulotlar</th>
-                        <th>Summa</th>
-                        <th>Status</th>
-                        <th>Amallar</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="order : ${orders}">
-                        <td><strong>#<span th:text="${order.id}">1</span></strong></td>
-                        <td th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}">
-                            01.01.2026
-                        </td>
-                        <td>User #<span th:text="${order.userId}">1</span></td>
-                        <td th:text="${order.totalItems} + ' ta'">0 ta</td>
-                        <td>
-                            <strong th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' so\'m'">
-                                0 so'm
-                            </strong>
-                        </td>
-                        <td>
-                                <span th:switch="${order.orderStatus.name()}">
-                                    <span th:case="'CREATED'" class="badge bg-info">Yaratildi</span>
-                                    <span th:case="'COOKING'" class="badge bg-warning text-dark">Tayyorlanmoqda</span>
-                                    <span th:case="'DELIVERING'" class="badge bg-primary">Yetkazilmoqda</span>
-                                    <span th:case="'COMPLETED'" class="badge bg-success">Yetkazildi</span>
-                                    <span th:case="'CANCELLED'" class="badge bg-danger">Bekor qilindi</span>
-                                </span>
-                        </td>
-                        <td>
-                            <a th:href="@{/admin/orders/{id}(id=${order.id})}"
-                               class="btn btn-sm btn-outline-primary">
-                                Ko'rish
-                            </a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+    <div class="card card-soft p-3">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>No</th>
+                    <th>ID</th>
+                    <th>Sana</th>
+                    <th>Mijoz</th>
+                    <th>Mahsulotlar</th>
+                    <th>Summa</th>
+                    <th>Status</th>
+                    <th>Amallar</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order , iterStat : ${orders}">
+                    <td th:text="${iterStat.count}">1</td> <!-- ✔ to‘g‘ri -->
+                    <td><strong><span th:text="${order.id}">1</span></strong></td>
+                    <td th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}">01.01.2026</td>
+                    <td> <span th:text="${order.getUserFullName()}">1</span></td>
+                    <td th:text="${order.totalItems} + ' ta'">0 ta</td>
+                    <td>
+                        <strong th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' so\'m'">0 so'm</strong>
+                    </td>
+                    <td>
+                            <span th:switch="${order.orderStatus.name()}">
+                                <span th:case="'CREATED'" class="badge bg-info">Yaratildi</span>
+                                <span th:case="'COOKING'" class="badge bg-warning text-dark">Tayyorlanmoqda</span>
+                                <span th:case="'DELIVERING'" class="badge bg-primary">Yetkazilmoqda</span>
+                                <span th:case="'COMPLETED'" class="badge bg-success">Yetkazildi</span>
+                                <span th:case="'CANCELLED'" class="badge bg-danger">Bekor qilindi</span>
+                            </span>
+                    </td>
+                    <td>
+                        <a th:href="@{/admin/orders/{id}(id=${order.id})}" class="btn btn-sm btn-outline-primary">Ko'rish</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
 </div>
+
+<!--<footer>-->
+<!--    &copy; 2026 NextPizza Admin. Barcha huquqlar himoyalangan.-->
+<!--</footer>-->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
