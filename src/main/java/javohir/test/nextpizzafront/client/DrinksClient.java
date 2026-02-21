@@ -31,4 +31,7 @@ public interface DrinksClient {
 
     @GetMapping("/drink/findby-id/{id}")
     DrinkResponse getDrinkById(@PathVariable Long id);
+
+    @GetMapping("drink/find-all-for-admin")
+    List<DrinkResponse> getAllDrinksForAdmin();
 }

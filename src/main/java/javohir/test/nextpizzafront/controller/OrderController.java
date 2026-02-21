@@ -51,7 +51,7 @@ public class OrderController extends BaseController {
             return "redirect:/cart";
         }
 
-        return "checkout";
+        return "user/checkout";
     }
 
     /**
@@ -107,7 +107,7 @@ public class OrderController extends BaseController {
             model.addAttribute("error", "Buyurtmalarni yuklab bo'lmadi");
         }
 
-        return "orders";
+        return "user/orders";
     }
 
     /**
@@ -132,7 +132,7 @@ public class OrderController extends BaseController {
             model.addAttribute("error", "Buyurtmani yuklab bo'lmadi");
         }
 
-        return "order-detail";
+        return "user/order-detail";
     }
 
     /**

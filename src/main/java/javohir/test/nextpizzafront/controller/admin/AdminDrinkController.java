@@ -32,7 +32,7 @@ public class AdminDrinkController extends BaseController {
         addNavbarAttributes(model, request);
 
         try {
-            List<DrinkResponse> drinks = drinksClient.getAllDrinks();
+            List<DrinkResponse> drinks = drinksClient.getAllDrinksForAdmin();
             model.addAttribute("drinks", drinks);
 
         } catch (Exception e) {

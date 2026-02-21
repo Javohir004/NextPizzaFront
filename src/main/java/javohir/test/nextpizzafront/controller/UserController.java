@@ -34,7 +34,7 @@ public class UserController extends BaseController {
             model.addAttribute("error", "Profilni yuklab bo'lmadi");
         }
 
-        return "profile";
+        return "user/profile";
     }
 
     @PostMapping("/profile/update")
