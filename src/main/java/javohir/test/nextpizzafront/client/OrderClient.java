@@ -41,5 +41,8 @@ public interface OrderClient {
     @GetMapping("/order/get-today's-order-counts")
     Long getTodayOrderCounts();
 
+    @GetMapping("/order/get-today's-order")
+    List<OrderResponse> getTodayOrder();
+
 
 }
