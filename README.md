@@ -1,52 +1,55 @@
+# 🍕 NextPizza Frontend (Spring MVC)
+
+NextPizza — pizza buyurtma tizimining **frontend qismi**.
+Backend REST API bilan **OpenFeign** orqali integratsiya qilingan.
 
 ---
 
-# 🍕 NextPizza Frontend - Spring MVC
+## 🚀 Imkoniyatlar
 
-NextPizza loyihasining **frontend qismi** - foydalanuvchilar uchun web interfeys. Backend REST API bilan **OpenFeign** orqali bog'lanadi.
+### 👤 User
 
----
+* Login / Register (JWT, HttpOnly cookie)
+* Pitsalar va ichimliklarni ko‘rish, filterlash
+* Savat boshqaruvi (add/update/delete)
+* Checkout va buyurtma tarixi
+* Profilni ko‘rish va tahrirlash
 
-## 🚀 Asosiy imkoniyatlar
+### 👑 Admin / Owner
 
-### 👤 Foydalanuvchi
-- Ro'yxatdan o'tish va login
-- Pitsalar va ichimliklarni ko'rish
-- Savatga qo'shish va buyurtma berish
-- Buyurtmalar tarixini ko'rish
-
-### 🧑‍🍳 Admin
-- Mahsulotlarni boshqarish
-- Buyurtmalarni ko'rish va status o'zgartirish
-
----
-
-## 🏗 Texnologiyalar
-
-- Spring MVC
-- Thymeleaf
-- OpenFeign
-- Bootstrap 5
-
+* Dashboard (orders, revenue, users statistikasi)
+* Mahsulotlar CRUD (pizza & drinks)
+* Buyurtmalarni boshqarish (status, filter)
+* User management (Owner only)
 
 ---
 
-## 📂 Struktura
+## 🛠 Texnologiyalar
 
-```
-frontend/
-├── controller/     # View logic
-├── client/         # Feign Clients (REST API)
-├── templates/      # Thymeleaf HTML
-└── static/         # CSS, JS
-```
-
----
-
-## 👨‍💻 Muallif
-
-**Javohir** - [@Javohir004](https://github.com/Javohir004)
+* **Spring Boot 3**
+* **Spring MVC**
+* **Thymeleaf**
+* **OpenFeign**
+* **Bootstrap 5**
+* **JWT Authentication**
 
 ---
 
-**NextPizza Frontend** 🍕✨
+## 🔐 Security
+
+* JWT (HttpOnly cookie)
+* Role-based access (USER / ADMIN / OWNER)
+* Interceptor-based protection
+* Production-ready konfiguratsiya
+
+---
+
+## 👨‍💻 Author
+
+**Javohir**
+GitHub: [https://github.com/Javohir004](https://github.com/Javohir004)
+
+---
+
+🍕 Built with Spring Boot & Thymeleaf
+
