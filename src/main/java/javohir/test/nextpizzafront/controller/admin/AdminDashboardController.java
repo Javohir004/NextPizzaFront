@@ -4,6 +4,7 @@ package javohir.test.nextpizzafront.controller.admin;
 
 import jakarta.servlet.http.HttpServletRequest;
 import javohir.test.nextpizzafront.client.OrderClient;
+import javohir.test.nextpizzafront.client.UserClient;
 import javohir.test.nextpizzafront.controller.BaseController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import java.util.List;
 public class AdminDashboardController extends BaseController {
 
     private final OrderClient orderClient;
+    private final UserClient userClient;
 
     /**
      * Admin Dashboard
@@ -34,11 +36,14 @@ public class AdminDashboardController extends BaseController {
         try {
             // TODO: Backend dan real statistika olish
             // Hozircha hardcoded
+            Long orderCounts = orderClient.getOrderCounts();
+            Long todayOrderCounts = orderClient.getTodayOrderCounts();
+            Long userCounts = userClient.getUserCount();
 
-            model.addAttribute("totalOrders", 150);
+            model.addAttribute("totalOrders", orderCounts);
             model.addAttribute("totalRevenue", new BigDecimal("15000000"));
-            model.addAttribute("activeUsers", 45);
-            model.addAttribute("todayOrders", 12);
+            model.addAttribute("activeUsers", userCounts);
+            model.addAttribute("todayOrders", todayOrderCounts);
 
             // Recent orders (hozircha bo'sh)
             model.addAttribute("recentOrders", List.of());
