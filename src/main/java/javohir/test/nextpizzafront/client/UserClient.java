@@ -29,4 +29,7 @@ public interface UserClient {
     @GetMapping("/user/me")
     UserResponse getCurrentUser();
 
+    @GetMapping("/user/users-count")
+    Long getUserCount();
+
 }

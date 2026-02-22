@@ -34,4 +34,12 @@ public interface OrderClient {
 
     @PutMapping("/order/admin/{orderId}/status")
     OrderResponse updateOrderStatus(@PathVariable Long orderId, @RequestBody UpdateOrderStatusRequest request);
+
+    @GetMapping("/order/get-order-counts")
+    Long getOrderCounts();
+
+    @GetMapping("/order/get-today's-order-counts")
+    Long getTodayOrderCounts();
+
+
 }
