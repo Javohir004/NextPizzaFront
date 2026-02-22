@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import javohir.test.nextpizzafront.client.OrderClient;
 import javohir.test.nextpizzafront.client.UserClient;
 import javohir.test.nextpizzafront.controller.BaseController;
+import javohir.test.nextpizzafront.dto.response.order.OrderResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,7 @@ public class AdminDashboardController extends BaseController {
             Long orderCounts = orderClient.getOrderCounts();
             Long todayOrderCounts = orderClient.getTodayOrderCounts();
             Long userCounts = userClient.getUserCount();
+            List<OrderResponse> todaysOrders = orderClient.getTodayOrder();
 
             model.addAttribute("totalOrders", orderCounts);
             model.addAttribute("totalRevenue", new BigDecimal("15000000"));
@@ -46,7 +48,7 @@ public class AdminDashboardController extends BaseController {
             model.addAttribute("todayOrders", todayOrderCounts);
 
             // Recent orders (hozircha bo'sh)
-            model.addAttribute("recentOrders", List.of());
+            model.addAttribute("recentOrders", todaysOrders);
 
             // TODO: Backend ga statistics endpoint qo'shish kerak
             // GET /api/admin/statistics
