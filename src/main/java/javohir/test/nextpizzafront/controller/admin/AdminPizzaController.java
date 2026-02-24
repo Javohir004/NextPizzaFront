@@ -63,10 +63,8 @@ public class AdminPizzaController extends BaseController {
                               @RequestParam(required = false) MultipartFile image,
                               RedirectAttributes redirectAttributes) {
         try {
-            // TODO: Image upload qilish kerak
-            // Hozircha image yo'q
 
-            pizzaClient.createPizza(request);
+            pizzaClient.createPizza(request , request.getPizzaType().toString(), image);
 
             log.info("Pizza created: {}", request.getName());
             redirectAttributes.addFlashAttribute("success", "Pitsa qo'shildi!");

@@ -5,7 +5,9 @@ import javohir.test.nextpizzafront.dto.response.PizzaResponse;
 import javohir.test.nextpizzafront.enums.PizzaType;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -24,8 +26,10 @@ public interface PizzaClient {
 
 
     // Admin endpoints qo'shish
-    @PostMapping("/pizza/create-pizza")
-    PizzaResponse createPizza(@RequestBody PizzaRequest request);
+    @PostMapping(value = "/pizza/create-pizza", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    PizzaResponse createPizza(@RequestPart("pizzaRequest") PizzaRequest request,
+                              @RequestPart("pizzaType") String pizzaType,
+                              @RequestPart("image") MultipartFile image);
 
     @PutMapping("/pizza/update/{id}")
     PizzaResponse updatePizza(@PathVariable Long id, @RequestBody PizzaRequest request);
