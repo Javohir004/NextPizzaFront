@@ -1,6 +1,7 @@
 package javohir.test.nextpizzafront.dto.request;
 
 
+import jakarta.validation.constraints.NotNull;
 import javohir.test.nextpizzafront.enums.PizzaType;
 import lombok.*;
 
