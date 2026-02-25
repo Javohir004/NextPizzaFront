@@ -31,13 +31,16 @@ public interface PizzaClient {
                               @RequestPart("pizzaType") String pizzaType,
                               @RequestPart("image") MultipartFile image);
 
-    @PutMapping("/pizza/update/{id}")
-    PizzaResponse updatePizza(@PathVariable Long id, @RequestBody PizzaRequest request);
+    @PostMapping( value = "/pizza/update-pizza/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    PizzaResponse updatePizza(@PathVariable Long id,
+                              @RequestPart("pizzaRequest") PizzaRequest request ,
+                              @RequestPart("pizzaType") String pizzaType,
+                              @RequestPart("image") MultipartFile image);
 
     @DeleteMapping("/pizza/delete/{id}")
     void deletePizza(@PathVariable Long id);
 
-    @GetMapping("/pizza/{id}")
+    @GetMapping("/pizza/pizza/{id}")
     PizzaResponse getPizzaById(@PathVariable Long id);
 
     @GetMapping("/pizza/all-pizza-for-admin")
