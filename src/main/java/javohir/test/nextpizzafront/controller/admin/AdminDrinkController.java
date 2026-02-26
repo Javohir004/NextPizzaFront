@@ -105,8 +105,6 @@ public class AdminDrinkController extends BaseController {
                               @RequestParam(required = false) MultipartFile image,
                               RedirectAttributes redirectAttributes) {
         try {
-            // TODO: Image upload
-
             drinksClient.updateDrink(id, request , request.getDrinkType().toString(), image);
 
             log.info("Drink updated: {}", id);
