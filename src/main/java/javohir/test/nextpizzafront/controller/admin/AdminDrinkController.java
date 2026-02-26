@@ -107,7 +107,7 @@ public class AdminDrinkController extends BaseController {
         try {
             // TODO: Image upload
 
-            drinksClient.updateDrink(id, request);
+            drinksClient.updateDrink(id, request , request.getDrinkType().toString(), image);
 
             log.info("Drink updated: {}", id);
             redirectAttributes.addFlashAttribute("success", "Ichimlik yangilandi!");
