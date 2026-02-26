@@ -5,7 +5,9 @@ import javohir.test.nextpizzafront.dto.response.DrinkResponse;
 import javohir.test.nextpizzafront.enums.DrinkType;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,8 +22,10 @@ public interface DrinksClient {
 
 
     // Admin endpoints qo'shish
-    @PostMapping("/drink/create-drink")
-    DrinkResponse createDrink(@RequestBody DrinkRequest request);
+    @PostMapping(value = "/drink/create-drink" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    DrinkResponse createDrink(@RequestPart("drinkRequest") DrinkRequest request,
+                              @RequestPart("drinkType") String pizzaType,
+                              @RequestPart("image") MultipartFile image);
 
     @PutMapping("/drink/update-drink/{id}")
     DrinkResponse updateDrink(@PathVariable Long id, @RequestBody DrinkRequest request);
