@@ -24,11 +24,14 @@ public interface DrinksClient {
     // Admin endpoints qo'shish
     @PostMapping(value = "/drink/create-drink" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     DrinkResponse createDrink(@RequestPart("drinkRequest") DrinkRequest request,
-                              @RequestPart("drinkType") String pizzaType,
+                              @RequestPart("drinkType") String drinkType,
                               @RequestPart("image") MultipartFile image);
 
-    @PutMapping("/drink/update-drink/{id}")
-    DrinkResponse updateDrink(@PathVariable Long id, @RequestBody DrinkRequest request);
+    @PostMapping( value = "/drink/update-drink/{id}" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    DrinkResponse updateDrink(@PathVariable Long id,
+                              @RequestPart("drinkRequest") DrinkRequest request,
+                              @RequestPart("drinkType") String drinkType,
+                              @RequestPart("image")  MultipartFile image);
 
     @DeleteMapping("/drink/delete-drink/{id}")
     void deleteDrink(@PathVariable Long id);
