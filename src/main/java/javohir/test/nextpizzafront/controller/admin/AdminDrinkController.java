@@ -61,9 +61,7 @@ public class AdminDrinkController extends BaseController {
                               @RequestParam(required = false) MultipartFile image,
                               RedirectAttributes redirectAttributes) {
         try {
-            // TODO: Image upload
-
-            drinksClient.createDrink(request);
+            drinksClient.createDrink(request , request.getDrinkType().toString(), image);
 
             log.info("Drink created: {}", request.getDrinkName());
             redirectAttributes.addFlashAttribute("success", "Ichimlik qo'shildi!");
