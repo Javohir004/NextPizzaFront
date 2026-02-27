@@ -70,7 +70,11 @@ public class AuthController extends BaseController {
             }
 
             // USER MA'LUMOTLARINI BACKEND DAN OLISH (role bilan) ✅
-            UserResponse user = userClient.getCurrentUser();
+//            UserResponse user = userClient.getCurrentUser();
+
+            UserResponse user = userClient.getCurrentUserWithToken(
+                    "Bearer " + authResponse.getAccessToken()
+            );
 
             log.info("User logged in: {} - Role: {}", user.getEmail(), user.getRole());
 

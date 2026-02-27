@@ -7,12 +7,13 @@ import javohir.test.nextpizzafront.client.CartClient;
 import javohir.test.nextpizzafront.client.UserClient;
 import javohir.test.nextpizzafront.dto.response.UserResponse;
 import javohir.test.nextpizzafront.dto.response.cart.CartResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
 import java.util.Arrays;
 
-
+@Slf4j
 public class BaseController {
 
     @Autowired
@@ -27,28 +28,28 @@ public class BaseController {
     protected void addNavbarAttributes(Model model, HttpServletRequest request) {
         if (hasJwtCookie(request)) {
             try {
-                // Backend dan user ma'lumotlarini olish
                 UserResponse user = userClient.getCurrentUser();
-                // Cart count olish
+
+                // ✅ if TASHQARISIGA chiqarildi
+                model.addAttribute("isAuthenticated", true);
+                model.addAttribute("username", user.getFirstName() + " " + user.getLastName());
+                model.addAttribute("balance", user.getBalance());
+                model.addAttribute("userId", user.getId());
+                model.addAttribute("userRole", user.getRole());
+
+                // Cart faqat USER uchun
                 int cartCount = 0;
                 if (user.getRole().name().equals("USER")) {
                     try {
                         CartResponse cart = cartClient.getCart();
                         cartCount = cart.getTotalItems() != null ? cart.getTotalItems() : 0;
                     } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        System.out.println(Arrays.toString(e.getStackTrace()));
+                        log.warn("Cart olishda xatolik: {}", e.getMessage());
                     }
-
-                    model.addAttribute("isAuthenticated", true);
-                    model.addAttribute("username", user.getFirstName() + " " + user.getLastName());
-                    model.addAttribute("balance", user.getBalance());
-                    model.addAttribute("userId", user.getId());
-                    model.addAttribute("userRole", user.getRole());
-                    model.addAttribute("cartItemCount", cartCount);  // TODO: Cart dan olish
                 }
+                model.addAttribute("cartItemCount", cartCount);
+
             } catch (Exception e) {
-                // JWT invalid yoki expired - logout
                 model.addAttribute("isAuthenticated", false);
             }
         } else {
