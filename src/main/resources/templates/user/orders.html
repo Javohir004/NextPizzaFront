@@ -8,7 +8,13 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
+    html, body {
+      height: 100%;
+    }
+
     body {
+      display: flex;
+      flex-direction: column;
       background: linear-gradient(180deg, #fff8f0 0%, #f3efe8 100%);
     }
 
@@ -44,6 +50,9 @@
 
     footer {
       background-color: #111;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
     }
   </style>
 </head>
@@ -62,111 +71,107 @@
   </div>
 </section>
 
-<div class="container py-5">
+<!-- FLEX WRAPPER -->
+<div class="flex-grow-1">
 
-  <!-- Success -->
-  <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
-    <span th:text="${success}"></span>
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  </div>
+  <div class="container py-5">
 
-  <!-- Error -->
-  <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
-    <span th:text="${error}"></span>
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  </div>
+    <!-- Success -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+      <span th:text="${success}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
 
-  <!-- EMPTY STATE -->
-  <div th:if="${orders == null or orders.isEmpty()}" class="text-center py-5">
-    <h3 class="text-muted mb-4">😕 Buyurtmalar yo‘q</h3>
-    <p class="mb-4">Hali buyurtma bermagansiz</p>
-    <a href="/pizzas" class="btn btn-primary">🍕 Buyurtma berish</a>
-  </div>
+    <!-- Error -->
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+      <span th:text="${error}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
 
-  <!-- ORDERS LIST -->
-  <div class="row" th:if="${orders != null and !orders.isEmpty()}">
+    <!-- EMPTY -->
+    <div th:if="${orders == null or orders.isEmpty()}" class="text-center py-5">
+      <h3 class="text-muted mb-4">😕 Buyurtmalar yo‘q</h3>
+      <p class="mb-4">Hali buyurtma bermagansiz</p>
+      <a href="/pizzas" class="btn btn-primary">🍕 Buyurtma berish</a>
+    </div>
 
-    <div class="col-lg-6 mb-4" th:each="order : ${orders}">
-      <div class="card order-card h-100">
+    <!-- LIST -->
+    <div class="row" th:if="${orders != null and !orders.isEmpty()}">
 
-        <div class="card-header d-flex justify-content-between align-items-center bg-transparent border-0 pt-4 px-4">
-          <strong>Buyurtma #<span th:text="${order.id}">1</span></strong>
+      <div class="col-lg-6 mb-4" th:each="order : ${orders}">
+        <div class="card order-card h-100">
 
-          <!-- Status Badge - FIXED -->
-          <span th:switch="${order.orderStatus.name()}">  <!-- ← .name() -->
-         <span th:case="'CREATED'" class="badge bg-info">CREATED</span>
-         <span th:case="'COOKING'" class="badge bg-warning text-dark">COOKING</span>
-         <span th:case="'DELIVERING'" class="badge bg-primary">DELIVERING</span>
-         <span th:case="'COMPLETED'" class="badge bg-success">COMPLETED</span>
-         <span th:case="'CANCELLED'" class="badge bg-danger">CANCELLED</span>
-         <span th:case="*" class="badge bg-secondary">UNKNOWN</span>
-        </span>
-        </div>
+          <div class="card-header d-flex justify-content-between align-items-center bg-transparent border-0 pt-4 px-4">
+            <strong>Buyurtma #<span th:text="${order.id}">1</span></strong>
 
-        <div class="card-body px-4">
-
-          <p class="text-muted mb-2">
-            📅
-            <span th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}">
-            01.01.2026 12:00
+            <span th:switch="${order.orderStatus.name()}">
+            <span th:case="'CREATED'" class="badge bg-info">CREATED</span>
+            <span th:case="'COOKING'" class="badge bg-warning text-dark">COOKING</span>
+            <span th:case="'DELIVERING'" class="badge bg-primary">DELIVERING</span>
+            <span th:case="'COMPLETED'" class="badge bg-success">COMPLETED</span>
+            <span th:case="'CANCELLED'" class="badge bg-danger">CANCELLED</span>
+            <span th:case="*" class="badge bg-secondary">UNKNOWN</span>
           </span>
-          </p>
+          </div>
 
-          <p class="mb-2">
-            📦
-            <strong th:text="${order.totalItems} + ' ta mahsulot'">
-              0 ta mahsulot
-            </strong>
-          </p>
+          <div class="card-body px-4">
 
-          <h5 class="text-danger fw-bold mb-3">
-            💰
-            <span th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')}">
-            0
-          </span>
-            so'm
-          </h5>
+            <p class="text-muted mb-2">
+              📅
+              <span th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}"></span>
+            </p>
 
-          <p class="small text-muted mb-0">
-            📍
-            <span th:text="${order.deliveryAddress}">Manzil</span>
-          </p>
+            <p class="mb-2">
+              📦
+              <strong th:text="${order.totalItems} + ' ta mahsulot'"></strong>
+            </p>
 
-        </div>
+            <h5 class="text-danger fw-bold mb-3">
+              💰
+              <span th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')}"></span>
+              so'm
+            </h5>
 
-        <div class="card-footer bg-transparent border-0 pb-4 px-4">
-          <div class="d-flex gap-2">
-
-            <a th:href="@{/orders/{id}(id=${order.id})}"
-               class="btn btn-outline-primary btn-sm flex-grow-1">
-              👁️ Ko'rish
-            </a>
-
-            <!-- Cancel Button - FIXED -->
-            <form th:if="${order.orderStatus.name() == 'CREATED' or order.orderStatus.name() == 'COOKING'}"
-                  th:action="@{/orders/{id}/cancel(id=${order.id})}"
-                  method="post"
-                  onsubmit="return confirm('Buyurtmani bekor qilmoqchimisiz?')"
-                  class="flex-grow-1">
-
-              <button type="submit"
-                      class="btn btn-outline-danger btn-sm w-100">
-                ❌ Bekor qilish
-              </button>
-
-            </form>
+            <p class="small text-muted mb-0">
+              📍
+              <span th:text="${order.deliveryAddress}"></span>
+            </p>
 
           </div>
-        </div>
 
+          <div class="card-footer bg-transparent border-0 pb-4 px-4">
+            <div class="d-flex gap-2">
+
+              <a th:href="@{/orders/{id}(id=${order.id})}"
+                 class="btn btn-outline-primary btn-sm flex-grow-1">
+                👁️ Ko'rish
+              </a>
+
+              <form th:if="${order.orderStatus.name() == 'CREATED' or order.orderStatus.name() == 'COOKING'}"
+                    th:action="@{/orders/{id}/cancel(id=${order.id})}"
+                    method="post"
+                    onsubmit="return confirm('Buyurtmani bekor qilmoqchimisiz?')"
+                    class="flex-grow-1">
+
+                <button type="submit"
+                        class="btn btn-outline-danger btn-sm w-100">
+                  ❌ Bekor qilish
+                </button>
+
+              </form>
+
+            </div>
+          </div>
+
+        </div>
       </div>
+
     </div>
 
   </div>
+</div> <!-- FLEX END -->
 
-</div>
-
-<footer class="text-white text-center py-4 mt-5">
+<footer>
   <div class="container">
     <p class="mb-0">&copy; 2026 NextPizza. Barcha huquqlar himoyalangan.</p>
   </div>
