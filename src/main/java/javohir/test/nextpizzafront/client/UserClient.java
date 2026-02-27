@@ -5,10 +5,7 @@ package javohir.test.nextpizzafront.client;
 import javohir.test.nextpizzafront.dto.request.auth.RegisterRequest;
 import javohir.test.nextpizzafront.dto.response.UserResponse;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 
 @FeignClient(name = "user-service", url = "${api.base-url}")
@@ -28,6 +25,13 @@ public interface UserClient {
      */
     @GetMapping("/user/me")
     UserResponse getCurrentUser();
+
+    // ✅ Yangi method qo'shing
+    @GetMapping("/user/me")
+    UserResponse getCurrentUserWithToken(
+            @RequestHeader("Authorization") String token
+    );
+
 
     @GetMapping("/user/users-count")
     Long getUserCount();

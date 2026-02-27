@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buyurtma #<span th:text="${order.id}">1</span> - NextPizza Admin</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, #fff8f0 0%, #f3efe8 100%);
+    }
+
+    .page-header {
+      background:
+              linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+              url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .custom-card {
+      border: none;
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      transition: 0.3s ease;
+    }
+
+    .custom-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+
+    .btn-primary {
+      background-color: #e63946;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #c62828;
+    }
+
+    footer {
+      background-color: #111;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 18px 40px;      /* kattaroq */
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 1.6rem;       /* 2x katta */
+      letter-spacing: 0.5px;
+    }
+
+    .status-created {
+      background: #e9ecef;
+      color: #495057;
+    }
+
+    .status-cooking {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-delivering {
+      background: #d0ebff;
+      color: #084298;
+    }
+
+    .status-completed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-cancelled {
+      background: #f8d7da;
+      color: #842029;
+    }
+
+  </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/admin-navbar :: admin-navbar}"></div>
+
+<!-- HEADER -->
+<section class="page-header">
+  <div class="container">
+    <h1 class="fw-bold">
+      📦 Buyurtma ID: <span th:text="${order.id}">1</span>
+    </h1>
+    <p class="lead">
+      <span th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}"></span>
+    </p>
+
+    <div class="mt-4 text-center">
+      <span th:switch="${order.orderStatus.name()}">
+
+      <span th:case="'CREATED'"
+          class="status-pill status-created">
+          🆕 Yaratildi
+      </span>
+
+      <span th:case="'COOKING'"
+          class="status-pill status-cooking">
+         🍳 Tayyorlanmoqda
+      </span>
+
+      <span th:case="'DELIVERING'"
+          class="status-pill status-delivering">
+         🚚 Yetkazilmoqda
+      </span>
+
+      <span th:case="'COMPLETED'"
+          class="status-pill status-completed">
+          ✅ Yetkazildi
+      </span>
+
+     <span th:case="'CANCELLED'"
+          class="status-pill status-cancelled">
+          ❌ Bekor qilindi
+     </span>
+    </span>
+    </div>
+  </div>
+</section>
+
+<!-- FLEX WRAPPER -->
+<div class="flex-grow-1">
+
+  <div class="container py-5">
+
+    <div class="row g-4">
+
+      <!-- LEFT SIDE -->
+      <div class="col-lg-8">
+
+        <div class="card custom-card mb-4">
+          <div class="card-body">
+            <div class="row">
+
+              <div class="col-md-6 mb-3">
+                <strong>Mijoz:</strong>
+                <p class="mb-0 text-muted"
+                   th:text="${order.getUserFullName()}"></p>
+              </div>
+
+              <div class="col-md-6 mb-3 text-md-end">
+                <strong>Jami summa:</strong>
+                <h4 class="text-danger fw-bold mt-2">
+                  <span th:text="${#numbers.formatDecimal(order.totalPrice,0,'COMMA',0,'POINT')}"></span>
+                  so'm
+                </h4>
+              </div>
+
+              <div class="col-12">
+                <strong>Yetkazib berish manzili:</strong>
+                <p class="text-muted mb-0"
+                   th:text="${order.deliveryAddress}"></p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ORDER ITEMS -->
+        <div class="card custom-card">
+          <div class="card-body">
+
+            <h5 class="fw-bold mb-4">
+              🍕 Mahsulotlar
+              (<span th:text="${order.totalItems}"></span> ta)
+            </h5>
+
+            <div class="table-responsive">
+              <table class="table align-middle">
+                <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Mahsulot</th>
+                  <th>Narx</th>
+                  <th>Soni</th>
+                  <th>Jami</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item, stat : ${order.orderItems}">
+                  <td th:text="${stat.count}"></td>
+                  <td th:text="${item.productName}"></td>
+                  <td th:text="${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')} + ' so\'m'"></td>
+                  <td th:text="${item.quantity}"></td>
+                  <td class="fw-bold text-danger"
+                      th:text="${#numbers.formatDecimal(item.totalPrice,0,'COMMA',0,'POINT')} + ' so\'m'">
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <a href="/admin/orders"
+             class="btn btn-primary">
+            ← Barcha buyurtmalar
+          </a>
+        </div>
+
+      </div>
+
+      <!-- RIGHT SIDE -->
+      <div class="col-lg-4">
+
+        <div class="card custom-card sticky-top" style="top: 20px;">
+          <div class="card-body">
+
+            <h5 class="fw-bold mb-4">⚙️ Holatni boshqarish</h5>
+
+            <form th:action="@{/admin/orders/{id}/status(id=${order.id})}"
+                  method="post">
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Yangi status</label>
+
+                <select name="status"
+                        class="form-select"
+                        th:disabled="${order.orderStatus.name() == 'COMPLETED'
+                                    or order.orderStatus.name() == 'CANCELLED'}">
+
+                  <option th:each="st : ${T(javohir.test.nextpizzafront.enums.OrderStatus).values()}"
+                          th:value="${st}"
+                          th:text="${st}"
+                          th:selected="${order.orderStatus == st}">
+                  </option>
+
+                </select>
+              </div>
+
+              <button type="submit"
+                      class="btn btn-primary w-100 mb-3"
+                      th:disabled="${order.orderStatus.name() == 'COMPLETED'
+                                  or order.orderStatus.name() == 'CANCELLED'}">
+                ✅ Statusni yangilash
+              </button>
+
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div> <!-- flex-grow-1 END -->
+
+<footer class="text-white text-center py-4">
+  <div class="container">
+    <p class="mb-0">&copy; 2026 NextPizza Admin</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
