@@ -8,7 +8,13 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
+    html, body {
+      height: 100%;
+    }
+
     body {
+      display: flex;
+      flex-direction: column;
       background: linear-gradient(180deg, #fff8f0 0%, #f3efe8 100%);
     }
 
@@ -74,8 +80,9 @@
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<!-- Header -->
-<!--<div class="bg-white py-4 border-bottom">-->
+<!-- FLEX WRAPPER -->
+<div class="flex-grow-1">
+
   <section class="page-header text-center">
     <div class="container">
       <h1 class="fw-bold">🍕 Barcha Pitsalar</h1>
@@ -85,96 +92,93 @@
     </div>
   </section>
 
-
   <div class="container py-5">
 
-  <!-- FILTER -->
-  <div class="text-center mb-5">
-    <div class="d-flex flex-wrap justify-content-center gap-2">
-      <a th:href="@{/pizzas}"
-         class="btn btn-outline-danger filter-btn"
-         th:classappend="${selectedType == null} ? ' active' : ''">
-        Barchasi
-      </a>
+    <!-- FILTER -->
+    <div class="text-center mb-5">
+      <div class="d-flex flex-wrap justify-content-center gap-2">
+        <a th:href="@{/pizzas}"
+           class="btn btn-outline-danger filter-btn"
+           th:classappend="${selectedType == null} ? ' active' : ''">
+          Barchasi
+        </a>
 
-      <a th:each="type : ${T(javohir.test.nextpizzafront.enums.PizzaType).values()}"
-         th:href="@{'/pizzas/type/' + ${type}}"
-         class="btn btn-outline-danger filter-btn"
-         th:text="${type}"
-         th:classappend="${selectedType?.name() == type.name()} ? ' active' : ''">
-      </a>
-    </div>
-  </div>
-
-  <!-- EMPTY -->
-  <div th:if="${pizzas.isEmpty()}" class="text-center py-5">
-    <h4 class="text-muted">😕 Pitsalar topilmadi</h4>
-    <a th:href="@{/pizzas}" class="btn btn-primary mt-3">Barchasini ko‘rish</a>
-  </div>
-
-  <!-- GRID -->
-  <div class="row" th:if="${!pizzas.isEmpty()}">
-    <div class="col-lg-4 col-md-6 mb-4" th:each="pizza : ${pizzas}">
-      <div class="card pizza-card h-100">
-
-        <img th:src="'http://localhost:3000/uploads/pizzas/' + ${pizza.imageUrl}"
-             class="card-img-top pizza-img"
-             th:alt="${pizza.name}"
-             onerror="this.src='https://via.placeholder.com/400x230?text=Pizza'"/>
-
-        <div class="card-body">
-          <h5 class="fw-bold" th:text="${pizza.name}">Pizza nomi</h5>
-
-          <p class="text-muted small"
-             th:text="${pizza.description}">
-            Tavsif
-          </p>
-
-          <span class="badge mb-2"
-                th:text="${pizza.pizzaType}">
-                    </span>
-
-          <h5 class="text-danger fw-bold"
-              th:text="${#numbers.formatDecimal(pizza.price, 0, 'COMMA', 0, 'POINT')} + ' so\'m'">
-          </h5>
-        </div>
-
-        <div class="card-footer bg-transparent border-0">
-
-          <div th:if="${isAuthenticated}">
-            <form th:action="@{/cart/add-pizza}" method="post" class="d-flex gap-2">
-              <input type="hidden" name="pizzaId" th:value="${pizza.pizzaId}">
-
-              <select name="quantity"
-                      class="form-select form-select-sm"
-                      style="width:80px;">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-              </select>
-
-              <button class="btn btn-primary w-100">
-                🛒 Savatga
-              </button>
-            </form>
-          </div>
-
-          <div th:unless="${isAuthenticated}">
-            <a th:href="@{/login}" class="btn btn-outline-danger w-100">
-              Buyurtma berish uchun kiring
-            </a>
-          </div>
-
-        </div>
-
+        <a th:each="type : ${T(javohir.test.nextpizzafront.enums.PizzaType).values()}"
+           th:href="@{'/pizzas/type/' + ${type}}"
+           class="btn btn-outline-danger filter-btn"
+           th:text="${type}"
+           th:classappend="${selectedType?.name() == type.name()} ? ' active' : ''">
+        </a>
       </div>
     </div>
+
+    <!-- EMPTY -->
+    <div th:if="${pizzas.isEmpty()}" class="text-center py-5">
+      <h4 class="text-muted">😕 Pitsalar topilmadi</h4>
+      <a th:href="@{/pizzas}" class="btn btn-primary mt-3">Barchasini ko‘rish</a>
+    </div>
+
+    <!-- GRID -->
+    <div class="row" th:if="${!pizzas.isEmpty()}">
+      <div class="col-lg-4 col-md-6 mb-4" th:each="pizza : ${pizzas}">
+        <div class="card pizza-card h-100">
+
+          <img th:src="'http://localhost:3000/uploads/pizzas/' + ${pizza.imageUrl}"
+               class="card-img-top pizza-img"
+               th:alt="${pizza.name}"
+               onerror="this.src='https://via.placeholder.com/400x230?text=Pizza'"/>
+
+          <div class="card-body">
+            <h5 class="fw-bold" th:text="${pizza.name}"></h5>
+
+            <p class="text-muted small"
+               th:text="${pizza.description}"></p>
+
+            <span class="badge mb-2"
+                  th:text="${pizza.pizzaType}"></span>
+
+            <h5 class="text-danger fw-bold"
+                th:text="${#numbers.formatDecimal(pizza.price, 0, 'COMMA', 0, 'POINT')} + ' so\'m'">
+            </h5>
+          </div>
+
+          <div class="card-footer bg-transparent border-0">
+
+            <div th:if="${isAuthenticated}">
+              <form th:action="@{/cart/add-pizza}" method="post" class="d-flex gap-2">
+                <input type="hidden" name="pizzaId" th:value="${pizza.pizzaId}">
+
+                <select name="quantity"
+                        class="form-select form-select-sm"
+                        style="width:80px;">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+
+                <button class="btn btn-primary w-100">
+                  🛒 Savatga
+                </button>
+              </form>
+            </div>
+
+            <div th:unless="${isAuthenticated}">
+              <a th:href="@{/login}" class="btn btn-outline-danger w-100">
+                Buyurtma berish uchun kiring
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
   </div>
+</div> <!-- FLEX END -->
 
-</div>
-
-<footer class="text-white text-center py-4 mt-5">
+<footer class="text-white text-center py-4">
   <div class="container">
     <p class="mb-0">&copy; 2026 NextPizza. Barcha huquqlar himoyalangan.</p>
   </div>

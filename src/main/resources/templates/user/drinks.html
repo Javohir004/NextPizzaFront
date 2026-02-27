@@ -8,8 +8,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
+        html, body {
+            height: 100%;
+        }
+
         body {
+            display: flex;
+            flex-direction: column;
             background: linear-gradient(180deg, #fff8f0 0%, #f3efe8 100%);
+            margin: 0;
         }
 
         .page-header {
@@ -21,9 +28,9 @@
             background-position: center;
             color: white;
             padding: 80px 0;
+            display: block;
         }
 
-        /* Main container "premium" look */
         .content-box {
             background: rgba(255,255,255,0.55);
             border: 1px solid rgba(255,255,255,0.6);
@@ -82,7 +89,6 @@
             color: white;
         }
 
-        /* Filter active style */
         .btn-outline-primary.active {
             background-color: #e63946;
             color: white;
@@ -93,7 +99,6 @@
             background-color: #ff9f1c !important;
         }
 
-        /* Only for drink cards, don't break bootstrap globally */
         .drink-card .price {
             color: #e63946;
             font-size: 1.1rem;
@@ -106,141 +111,128 @@
 </head>
 <body>
 
-<!-- Navbar -->
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<!-- Header -->
-<section class="page-header text-center">
-    <div class="container">
-        <h1 class="fw-bold">🥤 Barcha Ichimliklar</h1>
-        <p class="lead">Pitsangizga mos eng zo‘r ichimliklarni tanlang</p>
-    </div>
-</section>
+<!-- FLEX WRAPPER -->
+<div class="flex-grow-1">
 
-<!-- Main -->
-<div class="container py-5">
-    <div class="content-box">
-
-        <!-- Error -->
-        <div th:if="${error}" class="alert alert-danger text-center mb-4">
-            <span th:text="${error}"></span>
+    <section class="page-header text-center">
+        <div class="container">
+            <h1 class="fw-bold">🥤 Barcha Ichimliklar</h1>
+            <p class="lead">Pitsangizga mos eng zo‘r ichimliklarni tanlang</p>
         </div>
+    </section>
 
-        <!-- Filter -->
-        <div class="text-center mb-4">
-            <h5>Tur bo‘yicha filter:</h5>
-            <div class="d-flex justify-content-center flex-wrap gap-2 mt-3">
+    <div class="container py-5">
+        <div class="content-box">
 
-                <a th:href="@{/drinks}"
-                   class="btn btn-outline-primary"
-                   th:classappend="${selectedType == null} ? 'active' : ''">
-                    Barchasi
-                </a>
-
-                <!-- Enum bo'yicha aylanish -->
-                <a th:each="type : ${T(javohir.test.nextpizzafront.enums.DrinkType).values()}"
-                   th:href="@{'/drinks/type/' + ${type}}"
-                   class="btn btn-outline-primary"
-                   th:text="${type}"
-                   th:classappend="${selectedType?.name() == type.name()} ? ' active' : ''">
-                </a>
-
+            <div th:if="${error}" class="alert alert-danger text-center mb-4">
+                <span th:text="${error}"></span>
             </div>
-        </div>
 
-        <!-- Count -->
-        <p class="text-muted mb-4">
-            Jami: <strong th:text="${drinks.size()}">0</strong> ta ichimlik
-        </p>
+            <div class="text-center mb-4">
+                <h5>Tur bo‘yicha filter:</h5>
+                <div class="d-flex justify-content-center flex-wrap gap-2 mt-3">
 
-        <!-- Empty -->
-        <div th:if="${drinks.isEmpty()}" class="text-center py-5">
-            <h3 class="text-muted">😕 Ichimliklar topilmadi</h3>
-            <a th:href="@{/drinks}" class="btn btn-primary mt-3">
-                Barcha ichimliklarni ko‘rish
-            </a>
-        </div>
+                    <a th:href="@{/drinks}"
+                       class="btn btn-outline-primary"
+                       th:classappend="${selectedType == null} ? 'active' : ''">
+                        Barchasi
+                    </a>
 
-        <!-- Grid -->
-        <div class="row" th:if="${!drinks.isEmpty()}">
-
-            <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-4"
-                 th:each="drink : ${drinks}">
-
-                <div class="card drink-card">
-
-                    <div class="drink-img-wrapper">
-                        <img th:src="'http://localhost:3000/uploads/drinks/' + ${drink.imageUrl}"
-                             class="drink-img"
-                             th:alt="${drink.drinkName}"
-                             onerror="this.src='https://via.placeholder.com/400x220?text=Drink'"/>
-                    </div>
-
-                    <div class="card-body">
-
-                        <h5 class="fw-bold mb-1" th:text="${drink.drinkName}">
-                            Ichimlik nomi
-                        </h5>
-
-                        <p class="text-muted small mb-2">
-                            Hajmi: <strong th:text="${drink.volume}">0.5</strong> L
-                        </p>
-
-                        <span class="badge mb-2" th:text="${drink.drinkType}">
-                            CARBONATED
-                        </span>
-
-                        <h5 class="fw-bold mt-2 price">
-                            <span th:text="${#numbers.formatDecimal(drink.price, 0, 'COMMA', 0, 'POINT')}">
-                                8,000
-                            </span> so'm
-                        </h5>
-                    </div>
-
-                    <div class="card-footer bg-transparent border-0 pt-0 pb-3 px-3">
-
-                        <!-- If logged -->
-                        <div th:if="${isAuthenticated}">
-                            <form th:action="@{/cart/add-drink}" method="post" class="d-flex gap-2">
-
-                                <input type="hidden"
-                                       name="drinkId"
-                                       th:value="${drink.id}"/>
-
-                                <select name="quantity"
-                                        class="form-select form-select-sm"
-                                        style="width: 80px;">
-                                    <option value="1" selected>1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-
-                                <button type="submit" class="btn btn-primary w-100">
-                                    🛒 Savatga
-                                </button>
-                            </form>
-                        </div>
-
-                        <!-- If not logged -->
-                        <div th:unless="${isAuthenticated}">
-                            <a th:href="@{/login}" class="btn btn-outline-primary w-100">
-                                Buyurtma uchun kiring
-                            </a>
-                        </div>
-
-                    </div>
+                    <a th:each="type : ${T(javohir.test.nextpizzafront.enums.DrinkType).values()}"
+                       th:href="@{'/drinks/type/' + ${type}}"
+                       class="btn btn-outline-primary"
+                       th:text="${type}"
+                       th:classappend="${selectedType?.name() == type.name()} ? ' active' : ''">
+                    </a>
 
                 </div>
             </div>
 
+            <p class="text-muted mb-4">
+                Jami: <strong th:text="${drinks.size()}">0</strong> ta ichimlik
+            </p>
+
+            <div th:if="${drinks.isEmpty()}" class="text-center py-5">
+                <h3 class="text-muted">😕 Ichimliklar topilmadi</h3>
+                <a th:href="@{/drinks}" class="btn btn-primary mt-3">
+                    Barcha ichimliklarni ko‘rish
+                </a>
+            </div>
+
+            <div class="row" th:if="${!drinks.isEmpty()}">
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-4"
+                     th:each="drink : ${drinks}">
+
+                    <div class="card drink-card">
+
+                        <div class="drink-img-wrapper">
+                            <img th:src="'http://localhost:3000/uploads/drinks/' + ${drink.imageUrl}"
+                                 class="drink-img"
+                                 th:alt="${drink.drinkName}"
+                                 onerror="this.src='https://via.placeholder.com/400x220?text=Drink'"/>
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="fw-bold mb-1" th:text="${drink.drinkName}"></h5>
+
+                            <p class="text-muted small mb-2">
+                                Hajmi: <strong th:text="${drink.volume}"></strong> L
+                            </p>
+
+                            <span class="badge mb-2" th:text="${drink.drinkType}"></span>
+
+                            <h5 class="fw-bold mt-2 price">
+                                <span th:text="${#numbers.formatDecimal(drink.price, 0, 'COMMA', 0, 'POINT')}"></span> so'm
+                            </h5>
+                        </div>
+
+                        <div class="card-footer bg-transparent border-0 pt-0 pb-3 px-3">
+
+                            <div th:if="${isAuthenticated}">
+                                <form th:action="@{/cart/add-drink}" method="post" class="d-flex gap-2">
+
+                                    <input type="hidden"
+                                           name="drinkId"
+                                           th:value="${drink.id}"/>
+
+                                    <select name="quantity"
+                                            class="form-select form-select-sm"
+                                            style="width: 80px;">
+                                        <option value="1" selected>1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        🛒 Savatga
+                                    </button>
+                                </form>
+                            </div>
+
+                            <div th:unless="${isAuthenticated}">
+                                <a th:href="@{/login}" class="btn btn-outline-primary w-100">
+                                    Buyurtma uchun kiring
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
         </div>
-
     </div>
-</div>
 
-<footer class="text-white text-center py-4 mt-5">
+</div> <!-- FLEX END -->
+
+<footer class="text-white text-center py-4">
     <div class="container">
         <p class="mb-0">&copy; 2026 NextPizza. Barcha huquqlar himoyalangan.</p>
     </div>
