@@ -35,8 +35,7 @@ public class AdminDashboardController extends BaseController {
         addNavbarAttributes(model, request);
 
         try {
-            // TODO: Backend dan real statistika olish
-            // Hozircha hardcoded
+            // Backend dan real statistika olish
             Long orderCounts = orderClient.getOrderCounts();
             Long todayOrderCounts = orderClient.getTodayOrderCounts();
             Long userCounts = userClient.getUserCount();
@@ -49,10 +48,6 @@ public class AdminDashboardController extends BaseController {
 
             // Recent orders (hozircha bo'sh)
             model.addAttribute("recentOrders", todaysOrders);
-
-            // TODO: Backend ga statistics endpoint qo'shish kerak
-            // GET /api/admin/statistics
-            // GET /api/admin/orders/recent?limit=10
 
         } catch (Exception e) {
             log.error("Error loading dashboard: {}", e.getMessage());

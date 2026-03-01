@@ -26,12 +26,10 @@ public interface UserClient {
     @GetMapping("/user/me")
     UserResponse getCurrentUser();
 
-    // ✅ Yangi method qo'shing
     @GetMapping("/user/me")
     UserResponse getCurrentUserWithToken(
             @RequestHeader("Authorization") String token
     );
-
 
     @GetMapping("/user/users-count")
     Long getUserCount();
