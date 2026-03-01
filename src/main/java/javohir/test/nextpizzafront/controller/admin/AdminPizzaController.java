@@ -107,16 +107,16 @@ public class AdminPizzaController extends BaseController {
                               @ModelAttribute PizzaRequest request,
                               @RequestParam(required = false) MultipartFile image,
                               RedirectAttributes redirectAttributes) {
-//        try {
+        try {
             pizzaClient.updatePizza(id, request , request.getPizzaType().toString() , image);
 
             log.info("Pizza updated: {}", id);
             redirectAttributes.addFlashAttribute("success", "Pitsa yangilandi!");
 
-//        } catch (Exception e) {
-//            log.error("Error updating pizza: {}", e.getMessage());
-//            redirectAttributes.addFlashAttribute("error", "Xatolik: " + e.getMessage());
-//        }
+        } catch (Exception e) {
+            log.error("Error updating pizza: {}", e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Xatolik: " + e.getMessage());
+        }
 
         return "redirect:/admin/pizzas";
     }
