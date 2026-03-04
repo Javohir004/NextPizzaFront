@@ -141,15 +141,15 @@
                                 <!-- IMAGE -->
                                 <div class="col-md-2">
 
-                                    <img th:src="${pizza.imageUrl}"
-                                         class="card-img-top pizza-img"
-                                         th:alt="${pizza.name}"
-                                         onerror="this.src='https://via.placeholder.com/400x230?text=Pizza'"/>
+                                    <img th:if="${item.pizzaId != null}"
+                                         th:src="'http://localhost:3000/uploads/pizzas/' + ${item.imageUrl}"
+                                         class="img-fluid rounded"
+                                         onerror="this.src='https://via.placeholder.com/100?text=Pizza'">
 
-                                    <img th:src="${drink.imageUrl}"
-                                         class="card-img-top drink-img"
-                                         th:alt="${drink.drinkName}"
-                                         onerror="this.src='https://via.placeholder.com/400x230?text=Drink'"/>
+                                    <img th:if="${item.drinkId != null}"
+                                         th:src="'http://localhost:3000/uploads/drinks/' + ${item.imageUrl}"
+                                         class="img-fluid rounded"
+                                         onerror="this.src='https://via.placeholder.com/100?text=Drink'">
 
                                 </div>
 
