@@ -145,9 +145,9 @@
               <label class="form-label">Rasm</label>
 
               <div th:if="${pizza?.imageUrl}" class="mb-3">
-                <img th:src="'http://localhost:3000/uploads/pizzas/' + ${pizza.imageUrl}"
-                     class="img-preview"
-                     alt="Pizza rasm">
+                <img th:src="${pizza.imageUrl}"
+                     class="card-img-top pizza-img"
+                     th:alt="${pizza.name}">
               </div>
 
               <input type="file"
