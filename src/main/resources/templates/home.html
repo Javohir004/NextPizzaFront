@@ -121,7 +121,8 @@
 
                     <img th:src="${pizza.imageUrl}"
                          class="card-img-top pizza-img"
-                         th:alt="${pizza.name}">
+                         th:alt="${pizza.name}"
+                         onerror="this.src='https://via.placeholder.com/400x230?text=Pizza'"/>
 
                     <div class="card-body">
                         <h5 class="fw-bold" th:text="${pizza.name}">Pizza nomi</h5>
