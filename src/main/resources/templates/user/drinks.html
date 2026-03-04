@@ -169,10 +169,10 @@
                     <div class="card drink-card">
 
                         <div class="drink-img-wrapper">
-                            <img th:src="${drink.imageUrl}"
-                                 class="card-img-top drink-img"
+                            <img th:src="'http://localhost:3000/uploads/drinks/' + ${drink.imageUrl}"
+                                 class="drink-img"
                                  th:alt="${drink.drinkName}"
-                                 onerror="this.src='https://via.placeholder.com/400x230?text=Drink'"/>
+                                 onerror="this.src='https://via.placeholder.com/400x220?text=Drink'"/>
                         </div>
 
                         <div class="card-body">
