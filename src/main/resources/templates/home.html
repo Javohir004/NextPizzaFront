@@ -119,10 +119,10 @@
             <div class="col-12 col-sm-6 col-md-4 mb-4" th:each="pizza : ${pizzas}">
                 <div class="card pizza-card h-100">
 
-                    <img th:src="'http://localhost:3000/uploads/pizzas/' + ${pizza.imageUrl}"
+                    <img th:src="${pizza.imageUrl}"
                          class="card-img-top pizza-img"
                          th:alt="${pizza.name}"
-                         onerror="this.src='https://via.placeholder.com/400x220?text=Pizza'"/>
+                         onerror="this.src='https://via.placeholder.com/400x230?text=Pizza'"/>
 
                     <div class="card-body">
                         <h5 class="fw-bold" th:text="${pizza.name}">Pizza nomi</h5>
