@@ -119,10 +119,9 @@
           <td th:text="${iterStat.count}">1</td> <!-- ✔ to‘g‘ri -->
           <td><strong th:text="${pizza.pizzaId}">1</strong></td>
           <td>
-            <img th:src="'http://localhost:3000/uploads/pizzas/' + ${pizza.imageUrl}"
-                 style="width: 60px; height: 60px; object-fit: cover;"
-                 onerror="this.src='https://via.placeholder.com/60?text=Pizza'"
-                 alt="Pizza rasm">
+            <img th:src="${pizza.imageUrl}"
+                 class="card-img-top pizza-img"
+                 th:alt="${pizza.name}">
           </td>
           <td><strong th:text="${pizza.name}">Pizza</strong></td>
           <td><strong th:text="${pizza.description}">Pizza</strong></td>
