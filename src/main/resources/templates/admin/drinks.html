@@ -119,7 +119,7 @@
                     <td th:text="${iterStat.count}">1</td>
                     <td><strong th:text="${drink.id}">1</strong></td>
                     <td>
-                        <img th:src="'http://localhost:3000/uploads/drinks/' + ${drink.imageUrl}"
+                        <img th:src="${drink.imageUrl}"
                              style="width: 60px; height: 60px; object-fit: cover;"
                              onerror="this.src='https://via.placeholder.com/60?text=Drink'"
                              alt="Drink rasm">
