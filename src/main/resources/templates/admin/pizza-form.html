@@ -145,7 +145,7 @@
               <label class="form-label">Rasm</label>
 
               <div th:if="${pizza?.imageUrl}" class="mb-3">
-                <img th:src="${pizza.imageUrl}"
+                <img th:src="'http://localhost:3000/uploads/pizzas/' + ${pizza.imageUrl}"
                      class="img-preview"
                      alt="Pizza rasm">
               </div>
