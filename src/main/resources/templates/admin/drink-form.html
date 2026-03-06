@@ -145,7 +145,7 @@
                             <label class="form-label">Rasm</label>
 
                             <div th:if="${drink?.imageUrl}" class="mb-3">
-                                <img th:src="'http://localhost:3000/uploads/drinks/' + ${drink.imageUrl}"
+                                <img th:src="${drink.imageUrl}"
                                      class="img-preview"
                                      alt="Drink rasm">
                             </div>
